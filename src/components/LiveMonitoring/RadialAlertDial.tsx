@@ -146,7 +146,7 @@ export const RadialAlertDial: React.FC<RadialAlertDialProps> = ({
   onPriorityChange,
   selectedUseCaseId,
   onSelectUseCase,
-  variant = 1
+  variant = 2
 }) => {
   const priorityMeta = PRIORITY_CONFIG[selectedPriority] || PRIORITY_CONFIG.critical;
 

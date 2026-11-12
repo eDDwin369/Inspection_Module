@@ -311,8 +311,7 @@ export function LiveMonitoringPage({ onNavigate: _onNavigate }: LiveMonitoringPa
   const [zoneFilter, setZoneFilter] = useState('all');
   const [timeFilter, setTimeFilter] = useState('all');
 
-  // Option Switcher (1, 2, 3) & Radial Alert Dial States
-  const [alertUiOption, setAlertUiOption] = useState<1 | 2 | 3>(1);
+  // Priority and Alert Dial Filter States
   const [selectedPriority, setSelectedPriority] = useState<AlertPriorityId>('critical');
   // Default to 'fire-smoke' alert filter on initial load
   const [selectedUseCaseId, setSelectedUseCaseId] = useState<string | null>('fire-smoke');
@@ -528,43 +527,13 @@ export function LiveMonitoringPage({ onNavigate: _onNavigate }: LiveMonitoringPa
                   </button>
                 </div>
               )}
-
-              {/* BOTTOM OPTION SWITCHER PILL (1, 2, 3) */}
-              <div className="live-option-switcher-container">
-                <div className="live-option-switcher-pill" role="group" aria-label="Dial Design Options">
-                  <button
-                    type="button"
-                    className={`live-option-btn ${alertUiOption === 1 ? 'active' : ''}`}
-                    onClick={() => setAlertUiOption(1)}
-                    title="Option 1: Ultra-compact native circular dial (~115px)"
-                  >
-                    <span>Option 1: Compact Dial (115px)</span>
-                  </button>
-                  <button
-                    type="button"
-                    className={`live-option-btn ${alertUiOption === 2 ? 'active' : ''}`}
-                    onClick={() => setAlertUiOption(2)}
-                    title="Option 2: Focus HUD (Expands on hover to 132px)"
-                  >
-                    <span>Option 2: Focus HUD (Hover-Expand)</span>
-                  </button>
-                  <button
-                    type="button"
-                    className={`live-option-btn ${alertUiOption === 3 ? 'active' : ''}`}
-                    onClick={() => setAlertUiOption(3)}
-                    title="Option 3: Horizontal Mini-Dial Capsule (~38px height)"
-                  >
-                    <span>Option 3: Horizontal Capsule</span>
-                  </button>
-                </div>
-              </div>
             </div>
           </div>
 
-          {/* Right: Inline Radial Alert Dial (Variant 1, 2, or 3) */}
+          {/* Right: Inline Radial Alert Dial (Option 2: Focus HUD Hover-Expand) */}
           <div className="live-monitoring-dial-wrapper">
             <RadialAlertDial
-              variant={alertUiOption}
+              variant={2}
               selectedPriority={selectedPriority}
               onPriorityChange={handlePriorityChange}
               selectedUseCaseId={selectedUseCaseId}
@@ -837,36 +806,6 @@ export function LiveMonitoringPage({ onNavigate: _onNavigate }: LiveMonitoringPa
           </Card>
         )}
 
-        {/* BOTTOM OPTION SWITCHER PILL (1, 2, 3) */}
-        <div className="live-option-switcher-container">
-          <div className="live-option-switcher-pill" role="group" aria-label="Dial Design Options">
-            <button
-              type="button"
-              className={`live-option-btn ${alertUiOption === 1 ? 'active' : ''}`}
-              onClick={() => setAlertUiOption(1)}
-              title="Option 1: Ultra-compact native circular dial (~115px)"
-            >
-              <span>Option 1: Compact Dial (115px)</span>
-            </button>
-            <button
-              type="button"
-              className={`live-option-btn ${alertUiOption === 2 ? 'active' : ''}`}
-              onClick={() => setAlertUiOption(2)}
-              title="Option 2: Focus HUD (Expands on hover to 132px)"
-            >
-              <span>Option 2: Focus HUD (Hover-Expand)</span>
-            </button>
-            <button
-              type="button"
-              className={`live-option-btn ${alertUiOption === 3 ? 'active' : ''}`}
-              onClick={() => setAlertUiOption(3)}
-              title="Option 3: Horizontal Mini-Dial Capsule (~38px height)"
-            >
-              <span>Option 3: Horizontal Capsule</span>
-            </button>
-          </div>
-        </div>
-
         {/* INTERACTIVE LIVE VIEWPORT STREAM MODAL */}
         {selectedCameraForModal && (
           <Modal
@@ -1065,36 +1004,6 @@ export function LiveMonitoringPage({ onNavigate: _onNavigate }: LiveMonitoringPa
                         ))}
                       </div>
                     )}
-
-                    {/* BOTTOM OPTION SWITCHER PILL (1, 2, 3) */}
-                    <div className="live-option-switcher-container">
-                      <div className="live-option-switcher-pill" role="group" aria-label="Dial Design Options">
-                        <button
-                          type="button"
-                          className={`live-option-btn ${alertUiOption === 1 ? 'active' : ''}`}
-                          onClick={() => setAlertUiOption(1)}
-                          title="Option 1: Ultra-compact native circular dial (~115px)"
-                        >
-                          <span>Option 1: Compact Dial (115px)</span>
-                        </button>
-                        <button
-                          type="button"
-                          className={`live-option-btn ${alertUiOption === 2 ? 'active' : ''}`}
-                          onClick={() => setAlertUiOption(2)}
-                          title="Option 2: Focus HUD (Expands on hover to 132px)"
-                        >
-                          <span>Option 2: Focus HUD (Hover-Expand)</span>
-                        </button>
-                        <button
-                          type="button"
-                          className={`live-option-btn ${alertUiOption === 3 ? 'active' : ''}`}
-                          onClick={() => setAlertUiOption(3)}
-                          title="Option 3: Horizontal Mini-Dial Capsule (~38px height)"
-                        >
-                          <span>Option 3: Horizontal Capsule</span>
-                        </button>
-                      </div>
-                    </div>
                   </div>
 
                   {/* PTZ Coordinates Badge */}
@@ -1230,36 +1139,6 @@ export function LiveMonitoringPage({ onNavigate: _onNavigate }: LiveMonitoringPa
             </div>
           </Modal>
         )}
-
-        {/* BOTTOM OPTION SWITCHER PILL (1, 2, 3) */}
-        <div className="live-option-switcher-container">
-          <div className="live-option-switcher-pill" role="group" aria-label="Dial Design Options">
-            <button
-              type="button"
-              className={`live-option-btn ${alertUiOption === 1 ? 'active' : ''}`}
-              onClick={() => setAlertUiOption(1)}
-              title="Option 1: Ultra-compact native circular dial (~115px)"
-            >
-              <span>Option 1: Compact Dial (115px)</span>
-            </button>
-            <button
-              type="button"
-              className={`live-option-btn ${alertUiOption === 2 ? 'active' : ''}`}
-              onClick={() => setAlertUiOption(2)}
-              title="Option 2: Focus HUD (Expands on hover to 132px)"
-            >
-              <span>Option 2: Focus HUD (Hover-Expand)</span>
-            </button>
-            <button
-              type="button"
-              className={`live-option-btn ${alertUiOption === 3 ? 'active' : ''}`}
-              onClick={() => setAlertUiOption(3)}
-              title="Option 3: Horizontal Mini-Dial Capsule (~38px height)"
-            >
-              <span>Option 3: Horizontal Capsule</span>
-            </button>
-          </div>
-        </div>
 
       </div>
     </div>
