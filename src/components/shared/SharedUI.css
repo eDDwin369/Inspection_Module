@@ -1998,6 +1998,87 @@
   background: #3b82f6;
 }
 
+/* Fullscreen mode for Live View Camera Stream */
+.liveview-modal-fullscreen {
+  padding: 0 !important;
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  max-width: 100vw !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  max-height: 100vh !important;
+  border-radius: 0 !important;
+  overflow: hidden !important;
+}
+
+.liveview-modal-fullscreen .modal-standard-header {
+  display: none !important;
+}
+
+.liveview-modal-fullscreen .liveview-card,
+.liveview-card.is-fullscreen {
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  background: #000000 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  max-width: 100vw !important;
+  max-height: 100vh !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.liveview-viewport.is-fullscreen,
+.liveview-viewport:fullscreen,
+.liveview-viewport:-webkit-full-screen {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  max-width: 100vw !important;
+  max-height: 100vh !important;
+  aspect-ratio: auto !important;
+  border-radius: 0 !important;
+  background: #000000 !important;
+  z-index: 100050 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.liveview-viewport.is-fullscreen .liveview-feed-img,
+.liveview-viewport:fullscreen .liveview-feed-img,
+.liveview-viewport:-webkit-full-screen .liveview-feed-img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}
+
+.liveview-viewport.is-fullscreen .liveview-controls-bar,
+.liveview-viewport:fullscreen .liveview-controls-bar,
+.liveview-viewport:-webkit-full-screen .liveview-controls-bar {
+  top: 24px;
+  right: 24px;
+}
+
+.liveview-viewport.is-fullscreen .liveview-ptz-badge,
+.liveview-viewport:fullscreen .liveview-ptz-badge,
+.liveview-viewport:-webkit-full-screen .liveview-ptz-badge {
+  top: 24px;
+  left: 24px;
+}
+
+.liveview-viewport.is-fullscreen .liveview-play-btn,
+.liveview-viewport:fullscreen .liveview-play-btn,
+.liveview-viewport:-webkit-full-screen .liveview-play-btn {
+  bottom: 32px;
+}
+
+
 /* ========================================================
    ALERT HISTORY REFERENCE UI (Matching User Screenshot)
    ======================================================== */

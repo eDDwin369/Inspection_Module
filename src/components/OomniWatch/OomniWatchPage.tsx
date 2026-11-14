@@ -15,6 +15,7 @@ import {
   ArrowLeftRight,
   Bell,
   Maximize,
+  Minimize,
   Info,
   Check,
   CheckCircle2,
@@ -239,6 +240,63 @@ export function OomniWatchPage({
   const [ptzCoords, setPtzCoords] = useState<{ pan: number; tilt: number }>({ pan: 0, tilt: 0 });
   const [isAlertActive, setIsAlertActive] = useState<boolean>(false);
   const [isSubStream, setIsSubStream] = useState<boolean>(false);
+  const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
+  const liveviewViewportRef = React.useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      const active = Boolean(document.fullscreenElement);
+      setIsFullscreen(active);
+    };
+
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullscreenChange);
+      document.removeEventListener('webkitfullscreenchange', handleFullscreenChange);
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isFullscreen) {
+        if (document.fullscreenElement) {
+          document.exitFullscreen().catch(() => {});
+        }
+        setIsFullscreen(false);
+      }
+    };
+    window.addEventListener('keydown', handleEsc);
+    return () => window.removeEventListener('keydown', handleEsc);
+  }, [isFullscreen]);
+
+  const toggleFullscreen = () => {
+    if (!document.fullscreenElement && !isFullscreen) {
+      if (liveviewViewportRef.current?.requestFullscreen) {
+        liveviewViewportRef.current.requestFullscreen().then(() => {
+          setIsFullscreen(true);
+        }).catch(() => {
+          setIsFullscreen(true);
+        });
+      } else {
+        setIsFullscreen(true);
+      }
+    } else {
+      if (document.fullscreenElement) {
+        document.exitFullscreen().catch(() => {});
+      }
+      setIsFullscreen(false);
+    }
+  };
+
+  const handleCloseLiveModal = () => {
+    if (document.fullscreenElement) {
+      document.exitFullscreen().catch(() => {});
+    }
+    setIsFullscreen(false);
+    setSelectedCameraForModal(null);
+    setIsCameraDropdownOpen(false);
+  };
 
   const handleViewportClick = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -548,10 +606,7 @@ export function OomniWatchPage({
       {selectedCameraForModal && (
         <Modal
           isOpen={Boolean(selectedCameraForModal)}
-          onClose={() => {
-            setSelectedCameraForModal(null);
-            setIsCameraDropdownOpen(false);
-          }}
+          onClose={handleCloseLiveModal}
           icon={<Video size={18} />}
           title={modalMode === 'stream' ? selectedCameraForModal.name : `Node Info: ${selectedCameraForModal.name}`}
           subtitle={
@@ -561,14 +616,16 @@ export function OomniWatchPage({
               <>Hardware & Edge Configuration</>
             )
           }
-          maxWidth={modalMode === 'stream' ? "980px" : "640px"}
+          maxWidth={modalMode === 'stream' ? (isFullscreen ? "100vw" : "980px") : "640px"}
+          className={isFullscreen ? "liveview-modal-fullscreen" : ""}
         >
           {modalMode === 'stream' ? (
-            <div className="liveview-card">
+            <div className={`liveview-card ${isFullscreen ? 'is-fullscreen' : ''}`}>
 
               {/* Panoramic Viewport Area */}
               <div
-                className="liveview-viewport"
+                ref={liveviewViewportRef}
+                className={`liveview-viewport ${isFullscreen ? 'is-fullscreen' : ''}`}
                 onClick={handleViewportClick}
               >
                 {/* Simulated / Real Camera Live Feed */}
@@ -705,16 +762,10 @@ export function OomniWatchPage({
                   <button
                     type="button"
                     className="liveview-icon-btn"
-                    onClick={() => {
-                      if (!document.fullscreenElement) {
-                        document.documentElement.requestFullscreen().catch(() => { });
-                      } else {
-                        document.exitFullscreen().catch(() => { });
-                      }
-                    }}
-                    title="Toggle Fullscreen"
+                    onClick={toggleFullscreen}
+                    title={isFullscreen ? "Exit Fullscreen" : "Toggle Fullscreen"}
                   >
-                    <Maximize size={16} />
+                    {isFullscreen ? <Minimize size={16} /> : <Maximize size={16} />}
                   </button>
                 </div>
 
