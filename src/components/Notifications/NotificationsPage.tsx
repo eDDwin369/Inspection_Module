@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Search, Bell, MailOpen, Trash2 } from 'lucide-react';
+import { Search, Bell, MailOpen, Trash2, AtSign, Inbox, Mail, Palette, Users } from 'lucide-react';
 import type { NotificationItem } from './types';
 import { NotificationCard } from './NotificationCard';
 import './Notifications.css';
@@ -27,6 +27,18 @@ export function NotificationsPage({
   const tabs = ['Mentions', 'All', 'Unread', 'Themes', 'Team Activity', 'System'];
   const unreadCount = notifications.filter(n => !n.isRead).length;
   const mentionsCount = notifications.filter(n => n.isMention).length;
+
+  const getTabIcon = (tabName: string) => {
+    switch (tabName) {
+      case 'Mentions': return <AtSign size={15} />;
+      case 'All': return <Inbox size={15} />;
+      case 'Unread': return <Mail size={15} />;
+      case 'Themes': return <Palette size={15} />;
+      case 'Team Activity': return <Users size={15} />;
+      case 'System': return <Bell size={15} />;
+      default: return <Bell size={15} />;
+    }
+  };
 
   const filteredNotifications = notifications.filter(n => {
     // Tab filter
@@ -150,7 +162,7 @@ export function NotificationsPage({
           </div>
 
           <div className="notifications-toolbar">
-            <div className="notifications-tabs">
+            <div className="notifications-tabs" role="tablist">
               {tabs.map(tab => {
                 let count = '';
                 if (tab === 'Unread') {
@@ -161,10 +173,15 @@ export function NotificationsPage({
                 return (
                   <button 
                     key={tab}
+                    role="tab"
+                    aria-selected={activeTab === tab}
                     className={`notification-tab-btn ${activeTab === tab ? 'active' : ''}`}
                     onClick={() => setActiveTab(tab)}
                   >
-                    {tab}{count}
+                    <span className="tab-icon-badge">
+                      {getTabIcon(tab)}
+                    </span>
+                    <span>{tab}{count}</span>
                   </button>
                 );
               })}

@@ -319,44 +319,40 @@
 
 .notifications-tabs {
   display: flex;
-  gap: 4px;
+  gap: 8px;
   overflow-x: auto;
-  align-items: stretch;
-  height: 100%;
+  align-items: center;
+  border-bottom: 1px solid var(--border-light, #e2e8f0);
 }
 
 .notification-tab-btn {
   background: transparent;
   border: none;
-  color: var(--text-secondary, #5f6368);
-  padding: 0 16px;
-  font-size: 13.5px;
+  color: var(--text-secondary, #64748b);
+  padding: 8px 18px;
+  font-size: 14px;
   font-weight: 500;
   cursor: pointer;
   white-space: nowrap;
-  transition: all 0.05s;
-  display: flex;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  display: inline-flex;
   align-items: center;
-  height: 100%;
-  border-bottom: 3px solid transparent;
-  border-radius: calc(var(--radius-unit, 1px) * 8) calc(var(--radius-unit, 1px) * 8) 0 0;
+  gap: 8px;
+  border-bottom: 2.5px solid transparent;
+  border-radius: var(--radius-md, 8px) var(--radius-md, 8px) 0 0;
+  margin-bottom: -1px;
 }
 
-.notification-tab-btn:hover {
-  background-color: var(--highlight-hover, #f1f3f4);
-  color: var(--text-main, #202124);
-}
-
-.notification-tab-btn.active:hover {
-  color: var(--highlight, var(--primary));
-  background-color: var(--highlight-hover, var(--primary-light));
+.notification-tab-btn:hover:not(.active) {
+  background-color: color-mix(in srgb, var(--text-main) 4%, transparent);
+  color: var(--text-main, #0f172a);
 }
 
 .notification-tab-btn.active {
-  background-color: var(--highlight-hover, var(--primary-light));
-  color: var(--text-main, var(--primary));
-  font-weight: 400;
-  border-bottom: 3px solid var(--highlight, var(--primary));
+  background-color: var(--highlight-soft, color-mix(in srgb, var(--primary) 12%, transparent)) !important;
+  color: var(--primary) !important;
+  font-weight: 600;
+  border-bottom: 2.5px solid var(--primary) !important;
 }
 
 .notification-action-icon-btn:hover {

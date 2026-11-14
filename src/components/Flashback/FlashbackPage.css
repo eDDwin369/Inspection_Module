@@ -1,0 +1,466 @@
+/* Flashback Page & Recording History Styles */
+
+.flashback-page-container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 4px;
+}
+
+/* Recording History Cardless Section (Matching Image 2 Flat Design) */
+.flashback-history-card {
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin-bottom: 24px;
+}
+
+/* History Card Header */
+.flashback-history-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.flashback-history-title-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.flashback-history-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--primary, #059669);
+  letter-spacing: -0.2px;
+}
+
+.flashback-history-info-btn {
+  background: transparent;
+  border: none;
+  color: var(--primary, #059669);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 2px;
+  border-radius: 50%;
+  transition: opacity 0.15s ease;
+  opacity: 0.85;
+}
+
+.flashback-history-info-btn:hover {
+  opacity: 1;
+}
+
+/* Filters Row */
+.flashback-history-filters {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.flashback-history-filters .tf-wrapper {
+  background: var(--page-bg, color-mix(in srgb, var(--primary, #059669) 6%, #ffffff));
+  border-radius: calc(var(--radius-unit, 1px) * 12);
+}
+
+.flashback-history-filters .tf-outline {
+  border-color: var(--border-light, color-mix(in srgb, var(--primary, #059669) 25%, #cbd5e1));
+}
+
+.flashback-filter-select-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.flashback-filter-select {
+  height: 40px;
+  padding: 0 34px 0 14px;
+  border: 1px solid var(--border-light, color-mix(in srgb, var(--primary, #059669) 25%, #cbd5e1));
+  border-radius: 12px;
+  background: var(--page-bg, color-mix(in srgb, var(--primary, #059669) 6%, #ffffff));
+  color: var(--text-main, #0f172a);
+  font-family: var(--app-font-family, inherit);
+  font-size: 14px;
+  font-weight: 400;
+  cursor: pointer;
+  appearance: none;
+  outline: none;
+  box-shadow: none !important;
+  transition: all 0.18s ease;
+}
+
+.flashback-filter-select:hover {
+  border-color: var(--border-medium, #94a3b8);
+}
+
+.flashback-filter-select:focus {
+  border-color: var(--primary, #059669);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--primary, #059669) 15%, transparent);
+}
+
+.flashback-filter-chevron {
+  position: absolute;
+  right: 12px;
+  pointer-events: none;
+  color: var(--text-muted, #94a3b8);
+}
+
+.flashback-filter-date-input {
+  height: 36px;
+  padding: 0 12px;
+  border: 1px solid var(--border-light, #cbd5e1);
+  border-radius: 8px;
+  background: var(--bg-card, #ffffff);
+  color: var(--text-main, #0f172a);
+  font-family: var(--app-font-family, inherit);
+  font-size: 13px;
+  font-weight: 500;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.flashback-filter-date-input:focus {
+  border-color: var(--primary, #059669);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--primary, #059669) 15%, transparent);
+}
+
+/* History Table - Cardless Modern Table (Matching Image 2 Reference) */
+.flashback-history-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  border: none !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0;
+  min-height: 0;
+  display: block;
+}
+
+.flashback-history-table {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: separate;
+  border-spacing: 0;
+  text-align: left;
+  background: transparent;
+  font-family: var(--app-font-family, inherit);
+}
+
+.flashback-history-table thead tr {
+  background: var(--table-header-bg, color-mix(in srgb, var(--primary, #059669) 14%, var(--page-bg, #ffffff)));
+  transition: background-color 0.2s ease;
+}
+
+.flashback-history-table th {
+  padding: 12px 18px;
+  color: var(--table-header-text, var(--primary, #059669));
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: -0.1px;
+  border-top: none;
+  border-bottom: 1px solid var(--border-light, #e2e8f0);
+  background: transparent;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.flashback-history-table thead tr th:first-child {
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+  padding-left: 18px;
+}
+
+.flashback-history-table thead tr th:last-child {
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+  padding-right: 18px;
+}
+
+.flashback-history-table td {
+  padding: 12px 18px;
+  border-top: none;
+  border-bottom: 1px solid var(--table-row-divider, color-mix(in srgb, var(--text-main, #0f172a) 8%, transparent));
+  color: var(--text-main, #0f172a);
+  font-size: 13px;
+  vertical-align: middle;
+  background: transparent;
+}
+
+.flashback-history-table tbody tr {
+  background: transparent;
+  transition: background-color 0.15s ease;
+}
+
+.flashback-history-table tbody tr:hover td {
+  background: var(--table-row-hover, color-mix(in srgb, var(--primary, #059669) 5%, transparent));
+}
+
+.flashback-history-table tbody tr:last-child td {
+  border-bottom: 1px solid var(--table-row-divider, color-mix(in srgb, var(--text-main, #0f172a) 8%, transparent));
+}
+
+/* Recording Preview Thumbnail */
+.flashback-preview-thumb {
+  width: 72px;
+  height: 42px;
+  border-radius: 6px;
+  background: #090d16;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #94a3b8;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+.flashback-preview-thumb:hover {
+  border-color: var(--primary, #059669);
+  color: #ffffff;
+  transform: scale(1.04);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.flashback-preview-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.65;
+  transition: opacity 0.2s ease;
+}
+
+.flashback-preview-thumb:hover img {
+  opacity: 0.9;
+}
+
+.flashback-preview-icon-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.25);
+  transition: background-color 0.2s ease;
+}
+
+.flashback-preview-thumb:hover .flashback-preview-icon-overlay {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+/* Timestamp Formats */
+.flashback-timestamp-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.flashback-date-text {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-main, #0f172a);
+}
+
+.flashback-time-text {
+  font-size: 12px;
+  color: var(--text-muted, #64748b);
+  font-family: var(--font-mono, monospace);
+}
+
+/* Duration Text */
+.flashback-duration-text {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary, #475569);
+}
+
+/* Circular Play Button */
+.flashback-play-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--border-light, #e2e8f0);
+  background: var(--bg-card, #ffffff);
+  color: var(--primary, #059669);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.flashback-play-btn:hover {
+  background: var(--primary, #059669);
+  color: #ffffff;
+  border-color: var(--primary, #059669);
+  transform: scale(1.08);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--primary, #059669) 30%, transparent);
+}
+
+/* Pagination Row (Sitting directly on page background) */
+.flashback-pagination-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 20px;
+  padding: 20px 4px 8px 4px;
+  border-top: none;
+  background: transparent;
+  color: var(--text-secondary, #475569);
+  font-size: 13px;
+  flex-wrap: wrap;
+}
+
+.flashback-pagination-selector-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.flashback-pagination-info {
+  font-size: 13px;
+  color: var(--text-secondary, #475569);
+}
+
+.flashback-pagination-controls {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.flashback-page-nav-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text-main, #0f172a);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.flashback-page-nav-btn:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--primary, #059669) 10%, transparent);
+  color: var(--primary, #2563eb);
+  border-color: var(--border-light, #e2e8f0);
+}
+
+.flashback-page-nav-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* Video Player Modal Styling */
+.flashback-modal-video-container {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #000000;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border-light, #334155);
+}
+
+.flashback-modal-video-container video,
+.flashback-modal-video-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.flashback-modal-osd-header {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  right: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.flashback-modal-osd-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-family: var(--font-mono, monospace);
+  color: #ffffff;
+}
+
+.flashback-modal-bottom-controls {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  right: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  padding: 8px 14px;
+  z-index: 2;
+}
+
+.flashback-modal-play-toggle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--primary, #2563eb);
+  color: #ffffff;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.flashback-modal-play-toggle:hover {
+  transform: scale(1.08);
+}
+
+.flashback-modal-progress-bar {
+  flex: 1;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  position: relative;
+  cursor: pointer;
+}
+
+.flashback-modal-progress-fill {
+  height: 100%;
+  background: var(--primary, #2563eb);
+  border-radius: 4px;
+}

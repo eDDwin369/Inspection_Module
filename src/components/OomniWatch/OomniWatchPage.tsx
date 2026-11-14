@@ -782,27 +782,42 @@ export function OomniWatchPage({
         >
           <div>
             {/* Modal Internal Tabs (Basic | Configuration | PTZ Calibration) */}
-            <div className="modal-tabs-bar">
+            <div className="modal-tabs-bar" role="tablist">
               <button
                 type="button"
+                role="tab"
+                aria-selected={viewTab === 'basic'}
                 className={`modal-tab-btn ${viewTab === 'basic' ? 'active' : ''}`}
                 onClick={() => setViewTab('basic')}
               >
-                Basic
+                <span className="modal-tab-icon-badge">
+                  <Info size={16} />
+                </span>
+                <span>Basic</span>
               </button>
               <button
                 type="button"
+                role="tab"
+                aria-selected={viewTab === 'config'}
                 className={`modal-tab-btn ${viewTab === 'config' ? 'active' : ''}`}
                 onClick={() => setViewTab('config')}
               >
-                Configuration
+                <span className="modal-tab-icon-badge">
+                  <Settings size={16} />
+                </span>
+                <span>Configuration</span>
               </button>
               <button
                 type="button"
+                role="tab"
+                aria-selected={viewTab === 'ptz'}
                 className={`modal-tab-btn ${viewTab === 'ptz' ? 'active' : ''}`}
                 onClick={() => setViewTab('ptz')}
               >
-                PTZ Calibration
+                <span className="modal-tab-icon-badge">
+                  <SlidersHorizontal size={16} />
+                </span>
+                <span>PTZ Calibration</span>
               </button>
             </div>
 

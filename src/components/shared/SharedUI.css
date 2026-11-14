@@ -1029,8 +1029,13 @@
   flex-shrink: 0;
 }
 
-/* Flashback Tab Bar matching Base Application & Image 2 */
-.flashback-tabs-container {
+/* Universal Application Tab System (matching Reference UI) */
+.flashback-tabs-container,
+.admin-subtabs-bar,
+.modal-tabs-bar,
+.standard-tabs-bar,
+.app-tabs-container,
+.app-tabs-bar {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -1039,7 +1044,11 @@
   padding: 0 4px;
 }
 
-.flashback-tab-btn {
+.flashback-tab-btn,
+.admin-subtab-btn,
+.modal-tab-btn,
+.standard-tab-btn,
+.app-tab-btn {
   display: inline-flex;
   align-items: center;
   gap: 10px;
@@ -1057,19 +1066,31 @@
   margin-bottom: -1px;
 }
 
-.flashback-tab-btn:hover:not(.active) {
+.flashback-tab-btn:hover:not(.active),
+.admin-subtab-btn:hover:not(.active),
+.modal-tab-btn:hover:not(.active),
+.standard-tab-btn:hover:not(.active),
+.app-tab-btn:hover:not(.active) {
   color: var(--text-main);
   background: color-mix(in srgb, var(--text-main) 4%, transparent);
 }
 
-.flashback-tab-btn.active {
+.flashback-tab-btn.active,
+.admin-subtab-btn.active,
+.modal-tab-btn.active,
+.standard-tab-btn.active,
+.app-tab-btn.active {
   color: var(--primary);
   font-weight: 600;
   background: var(--highlight-soft, color-mix(in srgb, var(--primary) 12%, transparent));
   border-bottom: 2.5px solid var(--primary);
 }
 
-.flashback-tab-icon-badge {
+.flashback-tab-icon-badge,
+.admin-subtab-icon-badge,
+.modal-tab-icon-badge,
+.tab-icon-badge,
+.app-tab-icon-badge {
   width: 28px;
   height: 28px;
   border-radius: 50%;
@@ -1080,11 +1101,19 @@
   color: var(--text-muted);
 }
 
-.flashback-tab-btn:hover:not(.active) .flashback-tab-icon-badge {
+.flashback-tab-btn:hover:not(.active) .flashback-tab-icon-badge,
+.admin-subtab-btn:hover:not(.active) .admin-subtab-icon-badge,
+.modal-tab-btn:hover:not(.active) .modal-tab-icon-badge,
+.standard-tab-btn:hover:not(.active) .tab-icon-badge,
+.app-tab-btn:hover:not(.active) .app-tab-icon-badge {
   color: var(--text-main);
 }
 
-.flashback-tab-btn.active .flashback-tab-icon-badge {
+.flashback-tab-btn.active .flashback-tab-icon-badge,
+.admin-subtab-btn.active .admin-subtab-icon-badge,
+.modal-tab-btn.active .modal-tab-icon-badge,
+.standard-tab-btn.active .tab-icon-badge,
+.app-tab-btn.active .app-tab-icon-badge {
   background: var(--primary);
   color: var(--on-accent, #ffffff);
   box-shadow: 0 2px 8px color-mix(in srgb, var(--primary) 40%, transparent);

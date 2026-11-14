@@ -7,13 +7,19 @@ import {
   Settings, 
   Info, 
   Play, 
+  Pause,
   Download, 
   AlertCircle, 
   Film, 
   Clock, 
   Trash2, 
   Eye, 
-  MoreVertical 
+  MoreVertical,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  Calendar,
+  X
 } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardBody } from '../shared/Card';
 import { PageHeader } from '../shared/PageHeader';
@@ -21,8 +27,10 @@ import { Badge } from '../shared/Badge';
 import { SearchField } from '../shared/SearchField';
 import { CustomSmoothDropdown } from '../shared/CustomSmoothDropdown';
 import { Modal } from '../shared/Modal';
+import { RowsPerPageSelector } from '../shared/RowsPerPageSelector';
 import '../AccountSettings/AccountSettings.css';
 import '../shared/SharedUI.css';
+import './FlashbackPage.css';
 
 export interface CameraData {
   id: string;
@@ -157,6 +165,103 @@ const HISTORICAL_RECORDINGS = [
   }
 ];
 
+export interface RecordingHistoryItem {
+  id: string;
+  thumbnail: string;
+  createdDate: string;
+  createdTime: string;
+  completedDate: string;
+  completedTime: string;
+  duration: string;
+  location: string;
+  cameraName: string;
+  cameraId: string;
+  resolution: string;
+  size: string;
+}
+
+const EXACT_TOP_RECORDINGS: Partial<RecordingHistoryItem>[] = [
+  { createdTime: '11:19:57 AM', completedTime: '11:20:01 AM', duration: '5s' },
+  { createdTime: '11:19:53 AM', completedTime: '11:19:55 AM', duration: '2s' },
+  { createdTime: '11:19:45 AM', completedTime: '11:19:51 AM', duration: '6s' },
+  { createdTime: '11:19:40 AM', completedTime: '11:19:42 AM', duration: '3s' },
+  { createdTime: '11:19:34 AM', completedTime: '11:19:39 AM', duration: '6s' },
+  { createdTime: '11:19:26 AM', completedTime: '11:19:32 AM', duration: '6s' },
+  { createdTime: '11:19:15 AM', completedTime: '11:19:20 AM', duration: '5s' },
+  { createdTime: '11:19:04 AM', completedTime: '11:19:10 AM', duration: '6s' },
+  { createdTime: '11:18:50 AM', completedTime: '11:18:54 AM', duration: '4s' },
+  { createdTime: '11:18:32 AM', completedTime: '11:18:38 AM', duration: '6s' }
+];
+
+const generateHistoryRecordings = (total = 530): RecordingHistoryItem[] => {
+  const items: RecordingHistoryItem[] = [];
+  const baseEpoch = new Date('2026-11-14T11:18:32').getTime();
+  const durations = [5, 2, 6, 3, 6, 6, 4, 7, 5, 8, 3, 9, 6, 4];
+  const cameras = [
+    { id: 'cam-02', name: 'Chennai Rooftop 360', location: 'Chennai' },
+    { id: 'cam-01', name: 'Cafeteria Counter', location: 'Chennai' },
+    { id: 'cam-03', name: 'Loading Dock Bay 4', location: 'Chennai' },
+    { id: 'cam-04', name: 'Main Gate PTZ', location: 'Chennai' },
+    { id: 'cam-06', name: 'Server Room Data Vault', location: 'Chennai' },
+    { id: 'cam-05', name: 'Perimeter East Fence', location: 'Chennai' }
+  ];
+
+  for (let i = 0; i < total; i++) {
+    const cam = cameras[i % cameras.length];
+    const frameIndex = (i % 24).toString().padStart(4, '0');
+
+    if (i < EXACT_TOP_RECORDINGS.length) {
+      const exact = EXACT_TOP_RECORDINGS[i];
+      items.push({
+        id: `rec-${(i + 1).toString().padStart(4, '0')}`,
+        thumbnail: `/assets/frames/frame_${frameIndex}.jpg`,
+        createdDate: 'Nov 14, 2026',
+        createdTime: exact.createdTime!,
+        completedDate: 'Nov 14, 2026',
+        completedTime: exact.completedTime!,
+        duration: exact.duration!,
+        location: cam.location,
+        cameraName: cam.name,
+        cameraId: cam.id,
+        resolution: '4K UHD',
+        size: `${(parseFloat(exact.duration!) * 2.2).toFixed(1)} MB`
+      });
+    } else {
+      const dur = durations[i % durations.length];
+      const timeOffset = (i - 9) * 14 * 1000;
+      const cDate = new Date(baseEpoch - timeOffset);
+      const eDate = new Date(cDate.getTime() + dur * 1000);
+
+      const formatTime = (d: Date) => {
+        let h = d.getHours();
+        const m = d.getMinutes().toString().padStart(2, '0');
+        const s = d.getSeconds().toString().padStart(2, '0');
+        const ampm = h >= 12 ? 'PM' : 'AM';
+        h = h % 12 || 12;
+        return `${h}:${m}:${s} ${ampm}`;
+      };
+
+      items.push({
+        id: `rec-${(i + 1).toString().padStart(4, '0')}`,
+        thumbnail: `/assets/frames/frame_${frameIndex}.jpg`,
+        createdDate: 'Nov 14, 2026',
+        createdTime: formatTime(cDate),
+        completedDate: 'Nov 14, 2026',
+        completedTime: formatTime(eDate),
+        duration: `${dur}s`,
+        location: cam.location,
+        cameraName: cam.name,
+        cameraId: cam.id,
+        resolution: '4K UHD',
+        size: `${(dur * 2.1).toFixed(1)} MB`
+      });
+    }
+  }
+  return items;
+};
+
+const ALL_RECORDING_HISTORY: RecordingHistoryItem[] = generateHistoryRecordings(530);
+
 export function FlashbackPage() {
   // Navigation Tab: 'live' | 'history'
   const [activeTab, setActiveTab] = useState<'live' | 'history'>('live');
@@ -186,6 +291,24 @@ export function FlashbackPage() {
   const [historyTimeframe, setHistoryTimeframe] = useState<'24h' | '7d' | '30d'>('24h');
   const [historyEventType, setHistoryEventType] = useState('all');
   const [activeTimelineTime] = useState('14:22:10');
+
+  // Recording History Tab Controls & Pagination (matching Reference UI)
+  const [historyLocation, setHistoryLocation] = useState<string>('Chennai');
+  const [historyDate, setHistoryDate] = useState<string>('11/14/2026');
+  const [historyRowsPerPage, setHistoryRowsPerPage] = useState<number>(10);
+  const [historyPage, setHistoryPage] = useState<number>(1);
+  const [selectedRecordingForPlayback, setSelectedRecordingForPlayback] = useState<RecordingHistoryItem | null>(null);
+  const [isRecordingPlaying, setIsRecordingPlaying] = useState<boolean>(true);
+  const [playbackProgress, setPlaybackProgress] = useState<number>(45);
+
+  // Playback timer simulation
+  useEffect(() => {
+    if (!selectedRecordingForPlayback || !isRecordingPlaying) return;
+    const interval = setInterval(() => {
+      setPlaybackProgress(prev => (prev >= 100 ? 0 : prev + 5));
+    }, 400);
+    return () => clearInterval(interval);
+  }, [selectedRecordingForPlayback, isRecordingPlaying]);
 
   // Camera data fetching function (corrects endpoint to /api/cameras instead of duplicate /api/api/cameras)
   const fetchCamerasFromApi = async () => {
@@ -277,6 +400,26 @@ export function FlashbackPage() {
     });
   }, [historySearchQuery, historyEventType]);
 
+  // Filter history recordings by location and date (matching Reference UI)
+  const filteredHistoryRecordings = useMemo(() => {
+    return ALL_RECORDING_HISTORY.filter(rec => {
+      const matchLocation = historyLocation === 'all' || rec.location.toLowerCase() === historyLocation.toLowerCase();
+      const matchDate = !historyDate || rec.createdDate.includes('Nov 14') || historyDate === '11/14/2026';
+      return matchLocation && matchDate;
+    });
+  }, [historyLocation, historyDate]);
+
+  const totalHistoryCount = filteredHistoryRecordings.length;
+  const totalPages = Math.ceil(totalHistoryCount / historyRowsPerPage) || 1;
+
+  const paginatedRecordings = useMemo(() => {
+    const startIndex = (historyPage - 1) * historyRowsPerPage;
+    return filteredHistoryRecordings.slice(startIndex, startIndex + historyRowsPerPage);
+  }, [filteredHistoryRecordings, historyPage, historyRowsPerPage]);
+
+  const startEntry = totalHistoryCount === 0 ? 0 : (historyPage - 1) * historyRowsPerPage + 1;
+  const endEntry = Math.min(historyPage * historyRowsPerPage, totalHistoryCount);
+
   const handleOpenMenu = (camId: string, e: React.MouseEvent) => {
     e.stopPropagation();
     const rect = e.currentTarget.getBoundingClientRect();
@@ -325,7 +468,7 @@ export function FlashbackPage() {
           }
         />
 
-        {/* Tab Navigation Strip (Follows Base Application & Image 2) */}
+        {/* Tab Navigation Strip (Follows Standard Tab System) */}
         <div className="flashback-tabs-container" role="tablist">
           <button
             type="button"
@@ -624,183 +767,193 @@ export function FlashbackPage() {
           </Card>
         )}
 
-        {/* TAB 2: HISTORY (FORENSIC TIMELINE & ARCHIVED FOOTAGE) */}
+        {/* TAB 2: HISTORY (RECORDING HISTORY TABLE - ALIGNED WITH REFERENCE UI) */}
         {activeTab === 'history' && (
-          <div className="figma-settings-grid">
-            <div className="figma-column-left">
-              <Card>
-                <CardHeader
-                  action={
-                    <div style={{ display: 'flex', gap: '6px' }}>
-                      <button 
-                        className={`figma-btn-save ${historyTimeframe === '24h' ? '' : 'figma-btn-cancel'}`}
-                        style={{ padding: '5px 12px', fontSize: '12px' }}
-                        onClick={() => setHistoryTimeframe('24h')}
-                      >
-                        Last 24 Hours
-                      </button>
-                      <button 
-                        className={`figma-btn-save ${historyTimeframe === '7d' ? '' : 'figma-btn-cancel'}`}
-                        style={{ padding: '5px 12px', fontSize: '12px' }}
-                        onClick={() => setHistoryTimeframe('7d')}
-                      >
-                        Last 7 Days
-                      </button>
-                    </div>
-                  }
+          <div className="flashback-history-card">
+            {/* Header: Recording History with Info Icon */}
+            <div className="flashback-history-header">
+              <div className="flashback-history-title-group">
+                <span className="flashback-history-title">Recording History</span>
+                <span 
+                  className="flashback-history-info-btn"
+                  title="Historical video archive segments captured by triggered and continuous recording rules."
                 >
-                  <CardTitle>Historical Footage & Timeline Events</CardTitle>
-                </CardHeader>
-                <CardBody>
-                  {/* Forensic Time-Travel Scrubber Bar */}
-                  <div 
-                    style={{
-                      background: 'var(--nested-bg, color-mix(in srgb, var(--text-main) 3%, transparent))',
-                      border: '1px solid var(--border-light)',
-                      borderRadius: '10px',
-                      padding: '16px',
-                      marginBottom: '20px'
-                    }}
-                  >
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-                      <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                        <Clock size={15} style={{ color: 'var(--primary)' }} /> Forensic Timeline Scrub
-                      </span>
-                      <span style={{ fontSize: '12.5px', fontWeight: 600, color: 'var(--primary)', fontFamily: 'monospace' }}>
-                        Time: {activeTimelineTime}
-                      </span>
-                    </div>
-
-                    {/* Timeline bar with incident tick marks */}
-                    <div style={{ position: 'relative', width: '100%', height: '32px', background: 'var(--bg-card)', borderRadius: '6px', border: '1px solid var(--border-light)', overflow: 'hidden', display: 'flex', alignItems: 'center' }}>
-                      <div style={{ position: 'absolute', left: '15%', width: '12%', height: '100%', background: 'color-mix(in srgb, var(--primary) 25%, transparent)', borderLeft: '2px solid var(--primary)' }} title="04:00 - Patrol Event" />
-                      <div style={{ position: 'absolute', left: '38%', width: '8%', height: '100%', background: 'color-mix(in srgb, var(--warning, #f59e0b) 30%, transparent)', borderLeft: '2px solid var(--warning, #f59e0b)' }} title="09:14 - Loading Bay Motion" />
-                      <div style={{ position: 'absolute', left: '46%', width: '6%', height: '100%', background: 'color-mix(in srgb, var(--info, #0ea5e9) 30%, transparent)', borderLeft: '2px solid var(--info, #0ea5e9)' }} title="11:05 - Door Access" />
-                      <div style={{ position: 'absolute', left: '60%', width: '14%', height: '100%', background: 'color-mix(in srgb, var(--danger, #ef4444) 30%, transparent)', borderLeft: '2px solid var(--danger, #ef4444)' }} title="14:22 - Perimeter Alert" />
-                      
-                      {/* Scrub Pointer Needle */}
-                      <div style={{ position: 'absolute', left: '60%', top: 0, bottom: 0, width: '2px', background: '#dc2626', zIndex: 5, boxShadow: '0 0 6px rgba(220, 38, 38, 0.8)' }} />
-                    </div>
-
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: 'var(--text-muted)', marginTop: '6px' }}>
-                      <span>00:00:00</span>
-                      <span>06:00:00</span>
-                      <span>12:00:00</span>
-                      <span>18:00:00</span>
-                      <span>23:59:59</span>
-                    </div>
-                  </div>
-
-                  {/* Filter & Search Bar for Historical Clips */}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px', flexWrap: 'wrap' }}>
-                    <SearchField 
-                      value={historySearchQuery}
-                      onChange={(e) => setHistorySearchQuery(e.target.value)}
-                      placeholder="Search archive clips..."
-                    />
-
-                    <div style={{ width: '160px' }}>
-                      <CustomSmoothDropdown 
-                        label="Incident Type"
-                        value={historyEventType}
-                        onChange={setHistoryEventType}
-                        options={[
-                          { label: 'All Incident Types', value: 'all' },
-                          { label: 'Perimeter Alert', value: 'Perimeter Alert' },
-                          { label: 'Door Access', value: 'Door Access' },
-                          { label: 'Motion Detection', value: 'Motion Detection' },
-                          { label: 'Patrol', value: 'Patrol' }
-                        ]}
-                      />
-                    </div>
-                  </div>
-
-                  {/* Recordings List */}
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                    {filteredRecordings.map((rec) => (
-                      <div 
-                        key={rec.id}
-                        style={{
-                          padding: '14px 16px',
-                          borderRadius: '10px',
-                          border: '1px solid var(--border-light)',
-                          background: 'var(--nested-bg, color-mix(in srgb, var(--text-main) 3%, transparent))',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'space-between',
-                          gap: '12px'
-                        }}
-                      >
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                          <div style={{
-                            width: '36px',
-                            height: '36px',
-                            borderRadius: '8px',
-                            background: 'color-mix(in srgb, var(--primary) 14%, transparent)',
-                            color: 'var(--primary)',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            flexShrink: 0
-                          }}>
-                            <Film size={18} />
-                          </div>
-                          <div>
-                            <div style={{ fontSize: '13.5px', fontWeight: 600, color: 'var(--text-main)' }}>{rec.title}</div>
-                            <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
-                              {rec.time} • Duration: {rec.duration} • Size: {rec.size} • <Badge variant="primary">{rec.eventType}</Badge>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                          <button 
-                            className="figma-btn-cancel" 
-                            title="Play recording"
-                            onClick={() => {
-                              const foundCam = DEFAULT_CAMERAS.find(c => c.id === rec.cameraId);
-                              if (foundCam) setSelectedCameraForStream(foundCam);
-                            }}
-                            style={{ padding: '6px 12px', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '4px' }}
-                          >
-                            <Play size={13} /> Review
-                          </button>
-                          <button 
-                            className="figma-btn-edit-square" 
-                            title="Download archive clip"
-                            style={{ width: '32px', height: '32px' }}
-                          >
-                            <Download size={14} />
-                          </button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </CardBody>
-              </Card>
+                  <Info size={16} />
+                </span>
+              </div>
             </div>
 
-            {/* Storage Retention & Details Column */}
-            <div className="figma-column-right">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Storage Retention</CardTitle>
-                </CardHeader>
-                <CardBody>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>Retained Storage Pool</span>
-                      <span style={{ fontSize: '13.5px', fontWeight: 700, color: 'var(--text-main)' }}>14.2 TB / 20.0 TB</span>
-                    </div>
-                    <div style={{ width: '100%', height: '6px', borderRadius: '999px', background: 'var(--border-light)', overflow: 'hidden' }}>
-                      <div style={{ width: '71%', height: '100%', background: 'var(--primary)', borderRadius: '999px' }} />
-                    </div>
-                    <div style={{ fontSize: '12px', color: 'var(--text-muted)', lineHeight: '1.5' }}>
-                      Automated FIFO retention cycle set to 30 days rolling backup for standard HD footage and 90 days for flagged security incident highlights.
-                    </div>
-                  </div>
-                </CardBody>
-              </Card>
+            {/* Filter Controls Row: Location and Date */}
+            <div className="flashback-history-filters">
+              {/* Location Selector (CustomSmoothDropdown matching Reference Image 2) */}
+              <div style={{ minWidth: '150px' }}>
+                <CustomSmoothDropdown
+                  label="Location"
+                  value={historyLocation}
+                  onChange={(val) => {
+                    setHistoryLocation(val);
+                    setHistoryPage(1);
+                  }}
+                  options={[
+                    { label: 'Chennai', value: 'Chennai' },
+                    { label: 'Bangalore Hub', value: 'Bangalore Hub' },
+                    { label: 'Mumbai Facility', value: 'Mumbai Facility' },
+                    { label: 'Delhi Core', value: 'Delhi Core' },
+                    { label: 'All Locations', value: 'all' }
+                  ]}
+                />
+              </div>
+
+              {/* Date Selector */}
+              <div className="flashback-filter-select-wrapper">
+                <select
+                  className="flashback-filter-select"
+                  value={historyDate}
+                  onChange={(e) => {
+                    setHistoryDate(e.target.value);
+                    setHistoryPage(1);
+                  }}
+                  aria-label="Filter by Date"
+                >
+                  <option value="11/14/2026">11/14/2026</option>
+                  <option value="11/13/2026">11/13/2026</option>
+                  <option value="11/12/2026">11/12/2026</option>
+                  <option value="11/11/2026">11/11/2026</option>
+                  <option value="11/10/2026">11/10/2026</option>
+                  <option value="11/09/2026">11/09/2026</option>
+                  <option value="11/08/2026">11/08/2026</option>
+                </select>
+                <ChevronDown size={14} className="flashback-filter-chevron" />
+              </div>
+            </div>
+
+            {/* Recording History Data Table */}
+            <div className="flashback-history-table-wrapper">
+              <table className="flashback-history-table">
+                <thead>
+                  <tr>
+                    <th style={{ width: '140px' }}>Recording Preview</th>
+                    <th style={{ width: '220px' }}>Created</th>
+                    <th style={{ width: '220px' }}>Completed</th>
+                    <th style={{ width: '140px' }}>Duration</th>
+                    <th style={{ width: '90px', textAlign: 'center' }}>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {paginatedRecordings.map((rec) => (
+                    <tr key={rec.id}>
+                      {/* Recording Preview Thumbnail */}
+                      <td>
+                        <button
+                          type="button"
+                          className="flashback-preview-thumb"
+                          onClick={() => {
+                            setSelectedRecordingForPlayback(rec);
+                            setIsRecordingPlaying(true);
+                          }}
+                          title={`Click to preview ${rec.cameraName} recording`}
+                        >
+                          <img 
+                            src={rec.thumbnail} 
+                            alt={rec.cameraName}
+                            onError={(e) => {
+                              (e.currentTarget as HTMLElement).style.display = 'none';
+                            }}
+                          />
+                          <div className="flashback-preview-icon-overlay">
+                            <Video size={16} />
+                          </div>
+                        </button>
+                      </td>
+
+                      {/* Created Timestamp */}
+                      <td>
+                        <div className="flashback-timestamp-group">
+                          <span className="flashback-date-text">{rec.createdDate}</span>
+                          <span className="flashback-time-text">{rec.createdTime}</span>
+                        </div>
+                      </td>
+
+                      {/* Completed Timestamp */}
+                      <td>
+                        <div className="flashback-timestamp-group">
+                          <span className="flashback-date-text">{rec.completedDate}</span>
+                          <span className="flashback-time-text">{rec.completedTime}</span>
+                        </div>
+                      </td>
+
+                      {/* Duration */}
+                      <td>
+                        <span className="flashback-duration-text">{rec.duration}</span>
+                      </td>
+
+                      {/* Action: Circular Play Button */}
+                      <td style={{ textAlign: 'center' }}>
+                        <button
+                          type="button"
+                          className="flashback-play-btn"
+                          onClick={() => {
+                            setSelectedRecordingForPlayback(rec);
+                            setIsRecordingPlaying(true);
+                          }}
+                          title="Play recording playback"
+                          aria-label={`Play recording from ${rec.createdTime}`}
+                        >
+                          <Play size={13} fill="currentColor" style={{ marginLeft: '2px' }} />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                  {paginatedRecordings.length === 0 && (
+                    <tr>
+                      <td colSpan={5} style={{ textAlign: 'center', padding: '48px 16px', color: 'var(--text-muted)' }}>
+                        No recording history found matching the selected filters.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Pagination Footer */}
+            <div className="flashback-pagination-footer">
+              <div className="flashback-pagination-selector-group">
+                <RowsPerPageSelector
+                  value={historyRowsPerPage}
+                  onChange={(val) => {
+                    setHistoryRowsPerPage(val);
+                    setHistoryPage(1);
+                  }}
+                  options={[10, 20, 50, 100]}
+                />
+              </div>
+
+              <span className="flashback-pagination-info">
+                {startEntry}–{endEntry} of {totalHistoryCount}
+              </span>
+
+              <div className="flashback-pagination-controls">
+                <button
+                  type="button"
+                  className="flashback-page-nav-btn"
+                  onClick={() => setHistoryPage((p) => Math.max(1, p - 1))}
+                  disabled={historyPage <= 1}
+                  title="Previous Page"
+                  aria-label="Previous Page"
+                >
+                  <ChevronLeft size={16} />
+                </button>
+                <button
+                  type="button"
+                  className="flashback-page-nav-btn"
+                  onClick={() => setHistoryPage((p) => Math.min(totalPages, p + 1))}
+                  disabled={historyPage >= totalPages}
+                  title="Next Page"
+                  aria-label="Next Page"
+                >
+                  <ChevronRight size={16} />
+                </button>
+              </div>
             </div>
           </div>
         )}
@@ -965,6 +1118,125 @@ export function FlashbackPage() {
                       { label: 'Bandwidth Saver (720p)', value: '720p' }
                     ]}
                   />
+                </div>
+              </div>
+            </div>
+          </Modal>
+        )}
+
+        {/* INTERACTIVE RECORDING PLAYBACK MODAL */}
+        {selectedRecordingForPlayback && (
+          <Modal
+            isOpen={Boolean(selectedRecordingForPlayback)}
+            onClose={() => setSelectedRecordingForPlayback(null)}
+            title={`Recording Playback • ${selectedRecordingForPlayback.cameraName} (${selectedRecordingForPlayback.location})`}
+            maxWidth="880px"
+            footer={
+              <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'center' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
+                    {selectedRecordingForPlayback.resolution} • {selectedRecordingForPlayback.size} • Codec: H.265
+                  </span>
+                </div>
+                <div style={{ display: 'flex', gap: '8px' }}>
+                  <button
+                    type="button"
+                    className="figma-btn-save"
+                    style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '6px 14px' }}
+                    onClick={() => {
+                      alert(`Exporting high-resolution archive segment for ${selectedRecordingForPlayback.cameraName}...`);
+                    }}
+                  >
+                    <Download size={14} /> Download MP4
+                  </button>
+                  <button
+                    type="button"
+                    className="figma-btn-cancel"
+                    onClick={() => setSelectedRecordingForPlayback(null)}
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            }
+          >
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+              <div className="flashback-modal-video-container">
+                {/* OSD Header Overlay */}
+                <div className="flashback-modal-osd-header">
+                  <div className="flashback-modal-osd-badge">
+                    <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10b981', display: 'inline-block' }} />
+                    <span>REC PLAYBACK • {selectedRecordingForPlayback.cameraName}</span>
+                  </div>
+                  <div className="flashback-modal-osd-badge">
+                    <span>{selectedRecordingForPlayback.createdDate} {selectedRecordingForPlayback.createdTime}</span>
+                  </div>
+                </div>
+
+                {/* Video Feed */}
+                <video
+                  src="/assets/video.mp4"
+                  poster={selectedRecordingForPlayback.thumbnail}
+                  controls={false}
+                  autoPlay={isRecordingPlaying}
+                  loop
+                  playsInline
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                />
+
+                {/* Bottom Media Controls Overlay */}
+                <div className="flashback-modal-bottom-controls">
+                  <button
+                    type="button"
+                    className="flashback-modal-play-toggle"
+                    onClick={() => setIsRecordingPlaying(!isRecordingPlaying)}
+                    title={isRecordingPlaying ? 'Pause' : 'Play'}
+                  >
+                    {isRecordingPlaying ? <Pause size={14} fill="#fff" /> : <Play size={14} fill="#fff" />}
+                  </button>
+
+                  <div 
+                    className="flashback-modal-progress-bar"
+                    onClick={(e) => {
+                      const rect = e.currentTarget.getBoundingClientRect();
+                      const percent = Math.min(100, Math.max(0, ((e.clientX - rect.left) / rect.width) * 100));
+                      setPlaybackProgress(percent);
+                    }}
+                  >
+                    <div className="flashback-modal-progress-fill" style={{ width: `${playbackProgress}%` }} />
+                  </div>
+
+                  <span style={{ fontSize: '11px', color: '#cbd5e1', fontFamily: 'monospace' }}>
+                    00:0{Math.floor((playbackProgress / 100) * parseInt(selectedRecordingForPlayback.duration, 10))} / 00:{selectedRecordingForPlayback.duration.padStart(2, '0')}
+                  </span>
+                </div>
+              </div>
+
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+                gap: '12px',
+                padding: '12px 16px',
+                background: 'var(--nested-bg, color-mix(in srgb, var(--text-main) 3%, transparent))',
+                border: '1px solid var(--border-light, #e2e8f0)',
+                borderRadius: '8px',
+                fontSize: '12px'
+              }}>
+                <div>
+                  <span style={{ color: 'var(--text-muted)' }}>Camera ID: </span>
+                  <span style={{ fontWeight: 600, color: 'var(--text-main)' }}>{selectedRecordingForPlayback.cameraId}</span>
+                </div>
+                <div>
+                  <span style={{ color: 'var(--text-muted)' }}>Location: </span>
+                  <span style={{ fontWeight: 600, color: 'var(--text-main)' }}>{selectedRecordingForPlayback.location}</span>
+                </div>
+                <div>
+                  <span style={{ color: 'var(--text-muted)' }}>Created: </span>
+                  <span style={{ fontWeight: 600, color: 'var(--text-main)' }}>{selectedRecordingForPlayback.createdTime}</span>
+                </div>
+                <div>
+                  <span style={{ color: 'var(--text-muted)' }}>Completed: </span>
+                  <span style={{ fontWeight: 600, color: 'var(--text-main)' }}>{selectedRecordingForPlayback.completedTime}</span>
                 </div>
               </div>
             </div>
