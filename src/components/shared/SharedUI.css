@@ -1762,24 +1762,93 @@
   transform: scale(1.04);
 }
 
-/* Top Left PTZ Badge */
+/* Top Left PTZ Card / Preview with Dummy Video Feed */
 .liveview-ptz-badge {
   position: absolute;
   top: 16px;
   left: 16px;
-  background: rgba(15, 23, 42, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 8px;
-  padding: 6px 14px;
+  width: 200px;
+  min-height: 125px;
+  background: #090d16;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 10px;
+  overflow: hidden;
   color: #ffffff;
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  z-index: 10;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+  justify-content: space-between;
+  z-index: 20;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55);
+  user-select: none;
+}
+
+.liveview-ptz-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+  background: #000000;
+}
+
+.liveview-ptz-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(9, 13, 22, 0.88) 0%,
+    rgba(9, 13, 22, 0.15) 45%,
+    rgba(9, 13, 22, 0.2) 55%,
+    rgba(9, 13, 22, 0.9) 100%
+  );
+  z-index: 2;
   pointer-events: none;
+}
+
+.liveview-ptz-header {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 7px 10px;
+}
+
+.liveview-ptz-360-badge {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.3px;
+  line-height: 1;
+}
+
+.liveview-ptz-icon-btn {
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 2px;
+  border-radius: 4px;
+  opacity: 0.9;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.liveview-ptz-icon-btn:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.liveview-ptz-footer {
+  position: relative;
+  z-index: 3;
+  padding: 6px 10px 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
 .liveview-ptz-badge-title {
@@ -2753,4 +2822,160 @@
   background: var(--primary);
   color: #ffffff;
   box-shadow: 0 1px 4px color-mix(in srgb, var(--primary) 35%, transparent);
+}
+
+
+/* Live View Settings Panel (Matching User Reference Screenshot) */
+.liveview-settings-panel {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 290px;
+  background: #0d1527;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  padding: 16px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.65);
+  z-index: 70;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  animation: settingsPanelFadeIn 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  text-align: left;
+}
+
+@keyframes settingsPanelFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.liveview-settings-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.liveview-settings-label {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #ffffff;
+  line-height: 1.3;
+}
+
+.liveview-slider-wrapper {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.liveview-range-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 5px;
+  border-radius: 3px;
+  outline: none;
+  cursor: pointer;
+  margin: 4px 0;
+}
+
+.liveview-range-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: #3b82f6;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 0 6px rgba(59, 130, 246, 0.5);
+  transition: transform 0.12s ease;
+}
+
+.liveview-range-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+.liveview-range-slider::-moz-range-thumb {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: #3b82f6;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 0 6px rgba(59, 130, 246, 0.5);
+}
+
+.liveview-settings-desc {
+  font-size: 11.5px;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.liveview-settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.liveview-settings-row-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #ffffff;
+}
+
+.liveview-settings-info-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 17px;
+  height: 17px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  color: rgba(255, 255, 255, 0.7);
+  cursor: help;
+  transition: all 0.15s ease;
+}
+
+.liveview-settings-info-badge:hover {
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.45);
+}
+
+.liveview-settings-action-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.liveview-settings-action-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.35);
+  transform: scale(1.05);
+}
+
+.liveview-settings-action-btn.active {
+  background: rgba(59, 130, 246, 0.25);
+  border-color: #3b82f6;
+  color: #3b82f6;
 }

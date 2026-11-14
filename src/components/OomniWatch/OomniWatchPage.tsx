@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import {
   MoreVertical,
   Video,
+  VideoOff,
   Camera,
   Radio,
   Eye,
@@ -17,6 +18,8 @@ import {
   Maximize,
   Minimize,
   Info,
+  Sun,
+  Target,
   Check,
   CheckCircle2,
   SlidersHorizontal,
@@ -240,6 +243,50 @@ export function OomniWatchPage({
   const [ptzCoords, setPtzCoords] = useState<{ pan: number; tilt: number }>({ pan: 0, tilt: 0 });
   const [isAlertActive, setIsAlertActive] = useState<boolean>(false);
   const [isSubStream, setIsSubStream] = useState<boolean>(false);
+
+  // Live View Settings Panel & PTZ Calibration State (Matching Reference Screenshot)
+  const [isSettingsPanelOpen, setIsSettingsPanelOpen] = useState<boolean>(false);
+  const [previewCalibration, setPreviewCalibration] = useState<number>(10);
+  const [ptzClickBuffer, setPtzClickBuffer] = useState<number>(20);
+  const [isWebRTC, setIsWebRTC] = useState<boolean>(false);
+  const [isCalibrating, setIsCalibrating] = useState<boolean>(false);
+  const [isPtzVideoVisible, setIsPtzVideoVisible] = useState<boolean>(true);
+  const ptzVideoRef = React.useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    if (ptzVideoRef.current) {
+      if (isPlaying) {
+        ptzVideoRef.current.play().catch(() => {});
+      } else {
+        ptzVideoRef.current.pause();
+      }
+    }
+  }, [isPlaying]);
+  const settingsPanelRef = React.useRef<HTMLDivElement>(null);
+  const threeDotBtnRef = React.useRef<HTMLButtonElement>(null);
+
+  // Close Settings panel when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as Node;
+      if (
+        isSettingsPanelOpen &&
+        settingsPanelRef.current &&
+        !settingsPanelRef.current.contains(target) &&
+        threeDotBtnRef.current &&
+        !threeDotBtnRef.current.contains(target)
+      ) {
+        setIsSettingsPanelOpen(false);
+      }
+    };
+
+    if (isSettingsPanelOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isSettingsPanelOpen]);
   const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
   const liveviewViewportRef = React.useRef<HTMLDivElement>(null);
 
@@ -294,6 +341,7 @@ export function OomniWatchPage({
       document.exitFullscreen().catch(() => {});
     }
     setIsFullscreen(false);
+    setIsSettingsPanelOpen(false);
     setSelectedCameraForModal(null);
     setIsCameraDropdownOpen(false);
   };
@@ -646,14 +694,64 @@ export function OomniWatchPage({
                 {/* Vignette Overlay */}
                 <div className="camera-preview-overlay" />
 
-                {/* Top-Left PTZ Status Badge */}
-                <div className="liveview-ptz-badge">
-                  <div className="liveview-ptz-badge-title">
-                    <span>PTZ</span>
-                    <span className="liveview-ptz-badge-indicator" />
+                {/* Top-Left PTZ Status Card with Dummy Video Feed and Dynamic Scaling */}
+                <div 
+                  className="liveview-ptz-badge"
+                  style={{
+                    transform: `scale(${previewCalibration / 10})`,
+                    transformOrigin: 'top left',
+                    transition: 'transform 0.15s cubic-bezier(0.16, 1, 0.3, 1)'
+                  }}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  {/* Dummy Video Feed for PTZ Card */}
+                  {isPtzVideoVisible ? (
+                    <video
+                      ref={ptzVideoRef}
+                      src="/assets/video.mp4"
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      className="liveview-ptz-video"
+                    />
+                  ) : (
+                    <div className="liveview-ptz-video" style={{ background: '#090d16', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#64748b' }}>
+                      <VideoOff size={22} style={{ opacity: 0.4 }} />
+                    </div>
+                  )}
+
+                  {/* Gradient Overlay for Text Contrast */}
+                  <div className="liveview-ptz-overlay" />
+
+                  {/* Header: 360° badge on left, video icon on right (Matching User Reference Image 2) */}
+                  <div className="liveview-ptz-header">
+                    <span className="liveview-ptz-360-badge">360°</span>
+                    <button
+                      type="button"
+                      className="liveview-ptz-icon-btn"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setIsPtzVideoVisible(prev => !prev);
+                      }}
+                      title={isPtzVideoVisible ? "Hide PTZ Video Feed" : "Show PTZ Video Feed"}
+                    >
+                      {isPtzVideoVisible ? <Video size={14} /> : <VideoOff size={14} />}
+                    </button>
                   </div>
-                  <div className="liveview-ptz-badge-coords">
-                    Pan: {ptzCoords.pan}° &nbsp;Tilt: {ptzCoords.tilt}°
+
+                  {/* Footer: PTZ Status & Coordinates (Matching User Reference Image 1) */}
+                  <div className="liveview-ptz-footer">
+                    <div className="liveview-ptz-badge-title">
+                      <span>PTZ</span>
+                      <span className="liveview-ptz-badge-indicator" />
+                      {isCalibrating && (
+                        <span style={{ fontSize: '9px', color: '#10b981', marginLeft: '4px', fontWeight: 600 }}>CALIBRATED</span>
+                      )}
+                    </div>
+                    <div className="liveview-ptz-badge-coords">
+                      Pan: {ptzCoords.pan}° &nbsp;Tilt: {ptzCoords.tilt}°
+                    </div>
                   </div>
                 </div>
 
@@ -748,15 +846,121 @@ export function OomniWatchPage({
                     )}
                   </button>
 
-                  {/* Stream Settings / More options */}
-                  <button
-                    type="button"
-                    className="liveview-icon-btn"
-                    onClick={() => alert(`RTSP Stream Settings:\nCamera: ${selectedCameraForModal.name}\nResolution: ${selectedCameraForModal.resolution}\nFPS: ${selectedCameraForModal.fps}`)}
-                    title="Stream Settings"
-                  >
-                    <MoreVertical size={16} />
-                  </button>
+                  {/* Stream Settings / More options with Settings Panel (Matching User Reference Image 1) */}
+                  <div style={{ position: 'relative' }}>
+                    <button
+                      ref={threeDotBtnRef}
+                      type="button"
+                      className={`liveview-icon-btn ${isSettingsPanelOpen ? 'active' : ''}`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setIsSettingsPanelOpen(prev => !prev);
+                      }}
+                      title="Preview Settings"
+                      style={{
+                        background: isSettingsPanelOpen ? 'rgba(255, 255, 255, 0.2)' : 'transparent',
+                        color: isSettingsPanelOpen ? '#3b82f6' : 'rgba(255, 255, 255, 0.85)'
+                      }}
+                    >
+                      <MoreVertical size={16} />
+                    </button>
+
+                    {/* Settings Panel Popup */}
+                    {isSettingsPanelOpen && (
+                      <div
+                        ref={settingsPanelRef}
+                        className="liveview-settings-panel"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        {/* 1. Preview Size Calibration */}
+                        <div className="liveview-settings-section">
+                          <div className="liveview-settings-label">
+                            Preview Size Calibration ({previewCalibration}% of main)
+                          </div>
+                          <div className="liveview-slider-wrapper">
+                            <input
+                              type="range"
+                              min={5}
+                              max={40}
+                              value={previewCalibration}
+                              onChange={(e) => setPreviewCalibration(Number(e.target.value))}
+                              className="liveview-range-slider"
+                              style={{
+                                background: `linear-gradient(to right, #3b82f6 0%, #3b82f6 ${((previewCalibration - 5) / (40 - 5)) * 100}%, rgba(255, 255, 255, 0.25) ${((previewCalibration - 5) / (40 - 5)) * 100}%, rgba(255, 255, 255, 0.25) 100%)`
+                              }}
+                            />
+                          </div>
+                          <div className="liveview-settings-desc">
+                            Main preview keeps the remaining {100 - previewCalibration}%. Sizes adapt automatically to browser, resolution, and fullscreen.
+                          </div>
+                        </div>
+
+                        {/* 2. PTZ Click Buffer */}
+                        <div className="liveview-settings-section">
+                          <div className="liveview-settings-label">
+                            PTZ click buffer (max 20)
+                          </div>
+                          <div className="liveview-slider-wrapper">
+                            <input
+                              type="range"
+                              min={1}
+                              max={20}
+                              value={ptzClickBuffer}
+                              onChange={(e) => setPtzClickBuffer(Number(e.target.value))}
+                              className="liveview-range-slider"
+                              style={{
+                                background: `linear-gradient(to right, #3b82f6 0%, #3b82f6 ${((ptzClickBuffer - 1) / (20 - 1)) * 100}%, rgba(255, 255, 255, 0.25) ${((ptzClickBuffer - 1) / (20 - 1)) * 100}%, rgba(255, 255, 255, 0.25) 100%)`
+                              }}
+                            />
+                          </div>
+                          <div className="liveview-settings-desc">
+                            How many clicks each PTZ movement button can buffer while the camera is moving.
+                          </div>
+                        </div>
+
+                        {/* 3. Switch to WebRTC */}
+                        <div className="liveview-settings-row">
+                          <div className="liveview-settings-row-left">
+                            <span>Switch to WebRTC</span>
+                            <span 
+                              className="liveview-settings-info-badge"
+                              title="Low-latency WebRTC direct stream connection (<200ms latency)"
+                            >
+                              <Info size={11} />
+                            </span>
+                          </div>
+                          <button
+                            type="button"
+                            className={`liveview-settings-action-btn ${isWebRTC ? 'active' : ''}`}
+                            onClick={() => setIsWebRTC(prev => !prev)}
+                            title={isWebRTC ? "Switch back to standard RTSP stream" : "Switch to ultra-low-latency WebRTC stream"}
+                          >
+                            <Sun size={17} />
+                          </button>
+                        </div>
+
+                        {/* 4. Calibrate 360° -> PTZ */}
+                        <div className="liveview-settings-row">
+                          <div className="liveview-settings-row-left">
+                            <span>Calibrate 360° → PTZ</span>
+                          </div>
+                          <button
+                            type="button"
+                            className="liveview-settings-action-btn"
+                            onClick={() => {
+                              setIsCalibrating(true);
+                              setPtzCoords({ pan: 0, tilt: 0 });
+                              setTargetPos({ x: 50, y: 78 });
+                              setTimeout(() => setIsCalibrating(false), 1500);
+                            }}
+                            title="Calibrate 360 panoramic mapping to PTZ center"
+                          >
+                            <Target size={17} />
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
 
                   {/* Fullscreen button */}
                   <button
