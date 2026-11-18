@@ -35,7 +35,7 @@ const SCREEN_GROUPS: { label: string; screens: Screen[] }[] = [
 
 
 export function ThemeStudio({ onClose, currentView, onNavigate }: ThemeStudioProps) {
-  const [activeTheme, setActiveTheme] = useState<ThemeName>('amber');
+  const [activeTheme, setActiveTheme] = useState<ThemeName>('graphite');
   const [mode, setMode] = useState<Mode>('light');
   const [expandedAccordion, setExpandedAccordion] = useState<string | null>('theme-mode');
 
@@ -91,7 +91,7 @@ export function ThemeStudio({ onClose, currentView, onNavigate }: ThemeStudioPro
   }, [handleKeyDown]);
 
   const handleReset = () => {
-    setActiveTheme('amber');
+    setActiveTheme('graphite');
     setMode('light');
     onNavigate('overview');
   };

@@ -265,6 +265,8 @@ function syncCssVars(theme: any, settings: any) {
     emerald: { bg: '#061a12', border: '#163d2b' },
     indigo: { bg: '#120a2b', border: '#2c1e57' },
     'indigo-violet': { bg: '#120a2b', border: '#2c1e57' },
+    slate: { bg: '#181f23', border: '#2c373d' },
+    graphite: { bg: '#181f23', border: '#2c373d' },
   };
   const sidebarPreset = isDark ? figmaSidebarDark[settings.presetId] : undefined;
   const darkSidebarBase = sidebarPreset?.bg || darkSidebar;
@@ -294,6 +296,8 @@ function syncCssVars(theme: any, settings: any) {
     'corporate-blue': { inactive: 'rgba(201, 208, 238, 0.8)', sectionTitle: 'rgba(138, 147, 189, 0.7)' },
     indigo: { inactive: 'rgba(214, 199, 245, 0.8)', sectionTitle: 'rgba(156, 142, 196, 0.7)' },
     'indigo-violet': { inactive: 'rgba(214, 199, 245, 0.8)', sectionTitle: 'rgba(156, 142, 196, 0.7)' },
+    slate: { inactive: 'rgba(207, 216, 220, 0.8)', sectionTitle: 'rgba(144, 164, 174, 0.7)' },
+    graphite: { inactive: 'rgba(207, 216, 220, 0.8)', sectionTitle: 'rgba(144, 164, 174, 0.7)' },
   };
   const navTextPreset = isDark ? figmaNavText[settings.presetId] : undefined;
   set('--dash-nav-inactive-color', navTextPreset?.inactive || (isDark ? '#94a3b8' : '#475569'));
@@ -317,6 +321,8 @@ function syncCssVars(theme: any, settings: any) {
     emerald: 'linear-gradient(90deg, #97E1B2 0%, #E6E6E6 100%)',
     indigo: 'linear-gradient(90deg, #FCB3D8 0%, #E6E6E6 100%)',
     'indigo-violet': 'linear-gradient(90deg, #FCB3D8 0%, #E6E6E6 100%)',
+    slate: 'linear-gradient(90deg, #90A4AE 0%, #CFD8DC 100%)',
+    graphite: 'linear-gradient(90deg, #90A4AE 0%, #CFD8DC 100%)',
   };
   const figmaAccountCardDark: Record<string, string> = {
     corporate: 'linear-gradient(90deg, #010D27 0%, #03205F 100%)',
@@ -324,6 +330,8 @@ function syncCssVars(theme: any, settings: any) {
     emerald: 'linear-gradient(90deg, #001909 0%, #0A4821 100%)',
     indigo: 'linear-gradient(90deg, #010D27 0%, #37107A 100%)',
     'indigo-violet': 'linear-gradient(90deg, #010D27 0%, #37107A 100%)',
+    slate: 'linear-gradient(90deg, #1c2429 0%, #37474f 100%)',
+    graphite: 'linear-gradient(90deg, #1c2429 0%, #37474f 100%)',
   };
   const resolvedAccountCardBg = isDark
     ? figmaAccountCardDark[settings.presetId] || tk.accountCardBg || 'linear-gradient(90deg, #010D27 0%, #03205F 100%)'
@@ -338,7 +346,20 @@ function syncCssVars(theme: any, settings: any) {
   set('--gs-accent-gradient', tk.gsAccentGradient);
 
   // Toggle Switch Active Gradient (Theme Studio responsive, different for each theme)
-  const effectiveThemeId = (root.getAttribute('data-theme') || settings.presetId || 'corporate-blue').toLowerCase();
+  const presetThemeMap: Record<string, string> = {
+    slate: 'graphite',
+    graphite: 'graphite',
+    teal: 'ocean-teal',
+    'ocean-teal': 'ocean-teal',
+    indigo: 'indigo-violet',
+    'indigo-violet': 'indigo-violet',
+    corporate: 'corporate-blue',
+    'corporate-blue': 'corporate-blue',
+    emerald: 'emerald',
+    amber: 'amber',
+  };
+  const resolvedPreset = presetThemeMap[settings.presetId] || settings.presetId;
+  const effectiveThemeId = (root.getAttribute('data-theme') || resolvedPreset || 'graphite').toLowerCase();
   const toggleGradientMap: Record<string, string> = {
     emerald: 'linear-gradient(90deg, #d97706 0%, #16a34a 100%)',
     corporate: 'linear-gradient(90deg, #0284c7 0%, #2563eb 100%)',
@@ -346,8 +367,10 @@ function syncCssVars(theme: any, settings: any) {
     indigo: 'linear-gradient(90deg, #ec4899 0%, #6366f1 100%)',
     'indigo-violet': 'linear-gradient(90deg, #ec4899 0%, #6366f1 100%)',
     'ocean-teal': 'linear-gradient(90deg, #06b6d4 0%, #14b8a6 100%)',
+    teal: 'linear-gradient(90deg, #06b6d4 0%, #14b8a6 100%)',
     amber: 'linear-gradient(90deg, #ea580c 0%, #f59e0b 100%)',
     graphite: 'linear-gradient(90deg, #64748b 0%, #334155 100%)',
+    slate: 'linear-gradient(90deg, #64748b 0%, #334155 100%)',
   };
   const activeToggleGradient = toggleGradientMap[effectiveThemeId] || toggleGradientMap[settings.presetId] || tk.brandGradient || `linear-gradient(90deg, ${secondaryHex || '#d97706'} 0%, ${primaryHex || '#16a34a'} 100%)`;
   set('--toggle-active-bg', activeToggleGradient);
@@ -360,6 +383,8 @@ function syncCssVars(theme: any, settings: any) {
     'corporate-blue': 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
     indigo: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
     'indigo-violet': 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
+    slate: 'linear-gradient(135deg, #455a64 0%, #37474f 100%)',
+    graphite: 'linear-gradient(135deg, #455a64 0%, #37474f 100%)',
   };
   const activePillBtnBg = pillBtnMap[settings.presetId] || `linear-gradient(135deg, ${primaryHex} 0%, color-mix(in srgb, ${primaryHex} 80%, #000) 100%)`;
   set('--pill-btn-bg', activePillBtnBg);
@@ -431,7 +456,8 @@ function syncCssVars(theme: any, settings: any) {
   set('--radius-lg', `${theme.shape.borderRadius * 1.5}px`);
   set('--radius-xl', `${theme.shape.borderRadius * 2}px`);
   // flip the host's existing dark-var block to match the studio mode
-  root.setAttribute('data-theme-mode', settings.mode);
+  root.setAttribute('data-theme-mode', settings.mode || 'light');
+  root.setAttribute('data-theme', effectiveThemeId === 'slate' ? 'graphite' : effectiveThemeId);
 }
 
 function hexToHsl(hex: string): [number, number, number] {
@@ -468,6 +494,40 @@ function hslToHexStr(h: number, s: number, l: number): string {
     return Math.round(255 * color).toString(16).padStart(2, '0');
   };
   return `#${f(0)}${f(8)}${f(4)}`;
+}
+
+export const GRAPHITE_SNAP = {
+  primaryHex: '#455a64',
+  secondaryHex: '#78909c',
+  iconColor: '#455a64',
+  highlightHex: '#90A4AE',
+  cardStyle: 'floating',
+  cardShadowPx: 16,
+  videoShadowLight: '0px 4px 66px 0px #90A4AE',
+  videoShadowDark: '0px 4px 63.7px 0px #3B4A52'
+};
+
+// Ensure Graphite theme is applied by default when opening the website
+if (typeof window !== 'undefined') {
+  try {
+    const store = useThemeStore.getState();
+    const rawStorage = localStorage.getItem('omnieye-theme-studio');
+    const graphiteInitKey = 'omni_graphite_default_init_v1';
+    if (!localStorage.getItem(graphiteInitKey)) {
+      localStorage.setItem(graphiteInitKey, 'true');
+      if (!rawStorage) {
+        store.applyPreset('slate', GRAPHITE_SNAP);
+      } else {
+        const parsed = JSON.parse(rawStorage);
+        const pid = parsed?.state?.settings?.presetId;
+        if (!pid || pid === 'emerald') {
+          store.applyPreset('slate', GRAPHITE_SNAP);
+        }
+      }
+    }
+  } catch (err) {
+    console.warn('Failed to initialize default graphite theme:', err);
+  }
 }
 
 /**

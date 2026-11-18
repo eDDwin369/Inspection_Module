@@ -95,7 +95,8 @@
   --account-card-bg: linear-gradient(90deg, #FCB3D8 0%, #E6E6E6 100%);
 }
 
-[data-theme="graphite"] {
+[data-theme="graphite"],
+[data-theme="slate"] {
   --primary: #4B5563;
   --primary-hover: #374151;
   --primary-light: #F3F4F6;
@@ -1061,7 +1062,8 @@ input, button, select, textarea, span, p, div, label, a {
 [data-theme="corporate-blue"] { --theme-primary: var(--theme-corporate-blue); }
 [data-theme="emerald"] { --theme-primary: var(--theme-emerald); }
 [data-theme="indigo-violet"] { --theme-primary: var(--theme-indigo-violet); }
-[data-theme="graphite"] { --theme-primary: var(--theme-graphite); }
+[data-theme="graphite"],
+[data-theme="slate"] { --theme-primary: var(--theme-graphite); }
 [data-theme="ocean-teal"] { --theme-primary: var(--theme-ocean-teal); }
 [data-theme="amber"] { --theme-primary: var(--theme-amber); }
 
