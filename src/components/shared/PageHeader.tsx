@@ -39,8 +39,8 @@ export function PageHeader({ title, subtitle, actions, icon, subItem }: PageHead
             </span>
           )}
           <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
-            <h1 
-              className="figma-settings-title brand-gradient-text" 
+            <h2 
+              className="page-title figma-settings-title" 
               style={{ 
                 margin: 0, 
                 display: 'inline-flex', 
@@ -85,7 +85,7 @@ export function PageHeader({ title, subtitle, actions, icon, subItem }: PageHead
                   </span>
                 </>
               )}
-            </h1>
+            </h2>
 
             {subtitle && (
               <p className="figma-settings-subtitle" style={{ margin: '4px 0 0', width: '100%' }}>

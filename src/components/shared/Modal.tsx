@@ -76,21 +76,15 @@ export function Modal({
 
             <div className="modal-header-right">
               {headerActions}
-              {redCloseBtn ? (
-                <button 
-                  type="button" 
-                  className="modal-red-close-btn" 
-                  onClick={onClose} 
-                  aria-label="Close modal"
-                  title="Close"
-                >
-                  <X size={16} />
-                </button>
-              ) : (
-                <button type="button" className="figma-modal-close-btn" onClick={onClose} aria-label="Close modal">
-                  <X size={18} />
-                </button>
-              )}
+              <button 
+                type="button" 
+                className="close-btn modal-red-close-btn" 
+                onClick={onClose} 
+                aria-label="Close modal"
+                title="Close"
+              >
+                <X size={14} />
+              </button>
             </div>
           </div>
         ) : (
@@ -100,21 +94,15 @@ export function Modal({
             ) : (
               title
             )}
-            {redCloseBtn ? (
-              <button 
-                type="button" 
-                className="modal-red-close-btn" 
-                onClick={onClose} 
-                aria-label="Close modal"
-                title="Close"
-              >
-                <X size={16} />
-              </button>
-            ) : (
-              <button type="button" className="figma-modal-close-btn" onClick={onClose} aria-label="Close modal">
-                <X size={18} />
-              </button>
-            )}
+            <button 
+              type="button" 
+              className="close-btn modal-red-close-btn" 
+              onClick={onClose} 
+              aria-label="Close modal"
+              title="Close"
+            >
+              <X size={14} />
+            </button>
           </div>
         )}
 

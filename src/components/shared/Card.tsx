@@ -39,9 +39,9 @@ interface CardTitleProps extends React.HTMLAttributes<HTMLHeadingElement> {
 
 export function CardTitle({ children, className = '', gradient = true, ...props }: CardTitleProps) {
   return (
-    <h2 className={`figma-card-heading ${className}`} {...props}>
+    <h4 className={`card-title figma-card-heading ${className}`} {...props}>
       {gradient ? <span className="brand-gradient-text">{children}</span> : children}
-    </h2>
+    </h4>
   );
 }
 

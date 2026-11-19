@@ -28,11 +28,63 @@
 
 /* --- Theme System --- */
 :root {
-  /* Default: Corporate Blue */
+  /* Frontend Design Standards Tokens */
   --primary: #2563EB;
   --primary-hover: #1D4ED8;
   --primary-light: #EFF6FF;
+  --highlight: #60A5FA;
+  --on-accent: #FFFFFF;
+  --success: #16A34A;
+  --warning: #D97706;
+  --danger: #DC2626;
+  --info: #0284C7;
+  --page-bg: #F1F5F9;
+  --bg-card: #FFFFFF;
+  --nested-bg: color-mix(in srgb, var(--text-main) 3%, var(--bg-card));
+  --text-main: #0F172A;
+  --text-secondary: #475569;
+  --text-muted: #94A3B8;
+  --border-light: rgba(0, 0, 0, 0.08);
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --card-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+  --app-font-family: "Inter", system-ui, sans-serif;
+  --app-heading-family: var(--app-font-family);
+  --font-size-body: 14px;
+  --font-size-body-sm: 13px;
+  --font-size-caption: 12px;
+  --heading-lh: 1.2;
+  --h1-size: 30px;
+  --h1-weight: 700;
+  --h2-size: 24px;
+  --h2-weight: 600;
+  --h3-size: 21px;
+  --h3-weight: 600;
+  --h4-size: 19px;
+  --h4-weight: 600;
+  --h5-size: 16px;
+  --h5-weight: 600;
+  --h6-size: 14px;
+  --h6-weight: 600;
+
+  /* Default: Corporate Blue */
   --account-card-bg: linear-gradient(90deg, #6CA4FF 0%, #C9D8F2 100%);
+}
+
+:root[data-theme-mode="dark"],
+[data-theme-mode="dark"] {
+  --primary-light: color-mix(in srgb, var(--primary) 18%, transparent);
+  --highlight: color-mix(in srgb, var(--primary) 55%, #ffffff);
+  --page-bg: #0F172A;
+  --bg-card: #111C33;
+  --nested-bg: color-mix(in srgb, var(--text-main) 3%, var(--bg-card));
+  --text-main: #F8FAFC;
+  --text-secondary: #94A3B8;
+  --text-muted: #64748B;
+  --border-light: rgba(255, 255, 255, 0.10);
+  --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
 }
 
 [data-theme="corporate-blue"],
@@ -1486,7 +1538,7 @@ h2.brand-gradient-text,
     var(--account-card-bg, var(--bg-card));
 }
 
-/* Page header icon + title (Global Settings, Notifications, Account Settings) */
+/* Page header icon + title (Frontend Design Standards) */
 .page-title-group {
   display: flex;
   align-items: center;
@@ -1496,19 +1548,58 @@ h2.brand-gradient-text,
 
 .page-title-icon {
   flex-shrink: 0;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  color: var(--primary);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: color-mix(in srgb, var(--primary) 14%, transparent);
+}
+
+.page-title,
+.card-title {
+  margin: 0;
+  font-family: var(--app-heading-family);
+  line-height: var(--heading-lh);
   color: var(--primary);
 }
 
-[data-theme-mode="dark"] .page-title-icon {
-  background: color-mix(in srgb, var(--primary) 26%, transparent);
-  color: color-mix(in srgb, var(--primary) 55%, #ffffff);
+.page-title {
+  font-size: var(--h2-size);
+  font-weight: var(--h2-weight);
+}
+
+.card-title {
+  font-size: var(--h4-size);
+  font-weight: var(--h4-weight);
+}
+
+[data-theme-mode="dark"] :is(.page-title, .card-title, .page-title-icon) {
+  color: var(--highlight);
+}
+
+/* Window & Dialog Close Button (Standard Section 4 & 8) */
+.close-btn {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background: color-mix(in srgb, var(--danger) 14%, var(--bg-card));
+  color: var(--danger);
+  border: 1px solid color-mix(in srgb, var(--danger) 35%, transparent);
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--danger) 25%, transparent);
+  transition: background-color 0.2s, color 0.2s, transform 0.2s;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.close-btn:hover {
+  background: var(--danger);
+  color: #ffffff;
+  transform: translateY(-1px);
 }
 
 /* ── Menu tabs — Theme Studio tab behaviour (Global Settings + Notifications) ──

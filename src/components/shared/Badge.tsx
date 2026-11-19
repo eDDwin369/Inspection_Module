@@ -9,7 +9,7 @@ interface BadgeProps {
 
 export function Badge({ children, variant = 'primary', className = '' }: BadgeProps) {
   return (
-    <span className={`figma-badge figma-badge-${variant} ${className}`}>
+    <span className={`status-pill figma-badge figma-badge-${variant} ${variant} ${className}`}>
       {children}
     </span>
   );

@@ -101,12 +101,12 @@
   justify-content: center;
   gap: 8px;
   font-family: var(--app-font-family);
-  font-size: var(--font-size-body-sm, 13.5px);
-  font-weight: 600;
+  font-size: var(--font-size-body, 14px);
+  font-weight: 500;
   border-radius: var(--radius-md, 8px);
-  padding: 0 20px;
-  height: 38px;
-  min-height: 38px;
+  padding: 0 16px;
+  height: 36px;
+  min-height: 36px;
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   border: 1px solid transparent;
@@ -122,22 +122,24 @@
 }
 
 .app-btn.btn-sm {
-  height: 32px;
-  min-height: 32px;
-  padding: 0 14px;
-  font-size: 12px;
+  height: 28px;
+  min-height: 28px;
+  padding: 0 10px;
+  font-size: var(--font-size-caption, 12px);
+  border-radius: var(--radius-sm, 6px);
 }
 
 .app-btn.btn-lg {
-  height: 44px;
-  min-height: 44px;
-  padding: 0 28px;
+  height: 42px;
+  min-height: 42px;
+  padding: 0 20px;
   font-size: 15px;
 }
 
-/* 1. Primary Save Buttons (Green Save Changes reference) */
+/* 1. Primary Save Buttons (Section 4: Primary) */
 .figma-btn-save,
 .btn-save,
+.btn-primary,
 .app-btn.figma-btn-save,
 .camera-btn-primary-blue,
 .admin-primary-btn {
@@ -145,20 +147,20 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  height: 38px;
-  min-height: 38px;
-  padding: 0 20px;
+  height: 36px;
+  min-height: 36px;
+  padding: 0 16px;
   border-radius: var(--radius-md, 8px) !important;
   border: none !important;
-  background: var(--btn-color, var(--primary, #10b981)) !important;
-  color: var(--btn-text, #ffffff) !important;
+  background: var(--primary) !important;
+  color: var(--on-accent, #ffffff) !important;
   font-family: var(--app-font-family);
-  font-size: var(--font-size-body-sm, 13.5px);
-  font-weight: 600;
+  font-size: var(--font-size-body, 14px);
+  font-weight: 500;
   letter-spacing: 0.01em;
   text-transform: var(--btn-case, none);
   cursor: pointer;
-  box-shadow: 0 2px 8px color-mix(in srgb, var(--primary, #10b981) 32%, transparent);
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   box-sizing: border-box;
   text-decoration: none;
@@ -167,25 +169,27 @@
 
 .figma-btn-save:hover:not(:disabled),
 .btn-save:hover:not(:disabled),
+.btn-primary:hover:not(:disabled),
 .app-btn.figma-btn-save:hover:not(:disabled),
 .camera-btn-primary-blue:hover:not(:disabled),
 .admin-primary-btn:hover:not(:disabled) {
-  filter: brightness(1.08);
+  background: var(--primary-hover) !important;
   transform: translateY(-1px);
-  box-shadow: 0 4px 14px color-mix(in srgb, var(--primary, #10b981) 42%, transparent);
+  box-shadow: 0 2px 6px color-mix(in srgb, var(--primary) 25%, transparent);
 }
 
 .figma-btn-save:active:not(:disabled),
 .btn-save:active:not(:disabled),
+.btn-primary:active:not(:disabled),
 .app-btn.figma-btn-save:active:not(:disabled),
 .camera-btn-primary-blue:active:not(:disabled),
 .admin-primary-btn:active:not(:disabled) {
   transform: translateY(0);
-  filter: brightness(0.96);
 }
 
 .figma-btn-save:disabled,
 .btn-save:disabled,
+.btn-primary:disabled,
 .app-btn.figma-btn-save:disabled,
 .camera-btn-primary-blue:disabled,
 .admin-primary-btn:disabled {
@@ -197,36 +201,38 @@
 
 .figma-btn-save:focus-visible,
 .btn-save:focus-visible,
+.btn-primary:focus-visible,
 .app-btn.figma-btn-save:focus-visible,
 .camera-btn-primary-blue:focus-visible,
 .admin-primary-btn:focus-visible {
-  outline: 2px solid color-mix(in srgb, var(--primary, #10b981) 60%, transparent);
+  outline: 2px solid color-mix(in srgb, var(--primary) 60%, transparent);
   outline-offset: 2px;
 }
 
-/* 2. Cancel Buttons (Subtle light background, thin neutral border reference) */
+/* 2. Cancel Buttons (Section 4: Secondary) */
 .figma-btn-cancel,
 .btn-cancel,
+.btn-secondary,
 .app-btn.figma-btn-cancel,
 .camera-btn-outline-back {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  height: 38px;
-  min-height: 38px;
-  padding: 0 20px;
+  height: 36px;
+  min-height: 36px;
+  padding: 0 16px;
   border-radius: var(--radius-md, 8px) !important;
-  border: 1px solid var(--border-medium, #d1d5db) !important;
-  background: var(--bg-card, #ffffff) !important;
-  color: var(--text-main, #374151) !important;
+  border: 1px solid var(--border-light) !important;
+  background: transparent !important;
+  color: var(--text-main) !important;
   font-family: var(--app-font-family);
-  font-size: var(--font-size-body-sm, 13.5px);
-  font-weight: 600;
+  font-size: var(--font-size-body, 14px);
+  font-weight: 500;
   letter-spacing: 0.01em;
   text-transform: var(--btn-case, none);
   cursor: pointer;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  box-shadow: none;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   box-sizing: border-box;
   text-decoration: none;
@@ -235,12 +241,12 @@
 
 .figma-btn-cancel:hover:not(:disabled),
 .btn-cancel:hover:not(:disabled),
+.btn-secondary:hover:not(:disabled),
 .app-btn.figma-btn-cancel:hover:not(:disabled),
 .camera-btn-outline-back:hover:not(:disabled) {
-  background: var(--hover-bg, rgba(0, 0, 0, 0.04)) !important;
-  border-color: #9ca3af !important;
-  color: var(--text-main, #111827) !important;
-  transform: translateY(-0.5px);
+  background: color-mix(in srgb, var(--primary) 6%, transparent) !important;
+  border-color: var(--border-light) !important;
+  color: var(--text-main) !important;
 }
 
 .figma-btn-cancel:active:not(:disabled),
@@ -359,15 +365,19 @@
   min-height: 36px !important;
 }
 
-.app-btn.figma-btn-danger {
-  background: color-mix(in srgb, var(--danger, #ef4444) 14%, transparent);
-  color: var(--danger, #ef4444);
-  border-color: color-mix(in srgb, var(--danger, #ef4444) 35%, transparent);
+.app-btn.figma-btn-danger,
+.btn-danger {
+  background: var(--danger) !important;
+  color: var(--on-accent, #ffffff) !important;
+  border: none !important;
+  font-weight: 500;
 }
 
-.app-btn.figma-btn-danger:hover:not(:disabled) {
-  background: var(--danger, #ef4444);
-  color: var(--on-accent, #ffffff);
+.app-btn.figma-btn-danger:hover:not(:disabled),
+.btn-danger:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--danger) 85%, #000) !important;
+  color: var(--on-accent, #ffffff) !important;
+  transform: translateY(-1px);
 }
 
 .app-btn.figma-btn-ghost {
@@ -464,50 +474,61 @@
 }
 
 /* Badges */
-.figma-badge {
+.figma-badge,
+.status-pill,
+.chip {
   display: inline-flex;
   align-items: center;
-  padding: 3px 9px;
-  border-radius: var(--radius-sm, 6px);
-  font-size: 11.5px;
-  font-weight: 600;
-  letter-spacing: 0.2px;
+  justify-content: center;
+  padding: 0 8px;
+  border-radius: 999px;
+  font-size: 10px;
+  line-height: 18px;
+  font-weight: 500;
+  box-sizing: border-box;
+  white-space: nowrap;
 }
 
-.figma-badge-primary {
-  background: color-mix(in srgb, var(--primary) 14%, transparent);
+.figma-badge-primary,
+.status-pill.primary {
+  background: color-mix(in srgb, var(--primary) 12%, transparent);
   color: var(--primary);
-  border: 1px solid color-mix(in srgb, var(--primary) 28%, transparent);
+  border: none;
 }
 
-.figma-badge-success {
-  background: color-mix(in srgb, var(--success, #10b981) 14%, transparent);
-  color: var(--success, #10b981);
-  border: 1px solid color-mix(in srgb, var(--success, #10b981) 28%, transparent);
+.figma-badge-success,
+.status-pill.success {
+  background: color-mix(in srgb, var(--success) 12%, transparent);
+  color: var(--success);
+  border: none;
 }
 
-.figma-badge-warning {
-  background: color-mix(in srgb, var(--warning, #f59e0b) 14%, transparent);
-  color: var(--warning, #f59e0b);
-  border: 1px solid color-mix(in srgb, var(--warning, #f59e0b) 28%, transparent);
+.figma-badge-warning,
+.status-pill.warning {
+  background: color-mix(in srgb, var(--warning) 12%, transparent);
+  color: var(--warning);
+  border: none;
 }
 
-.figma-badge-danger {
-  background: color-mix(in srgb, var(--danger, #ef4444) 14%, transparent);
-  color: var(--danger, #ef4444);
-  border: 1px solid color-mix(in srgb, var(--danger, #ef4444) 28%, transparent);
+.figma-badge-danger,
+.status-pill.danger {
+  background: color-mix(in srgb, var(--danger) 12%, transparent);
+  color: var(--danger);
+  border: none;
 }
 
-.figma-badge-info {
-  background: color-mix(in srgb, var(--info, #0ea5e9) 14%, transparent);
-  color: var(--info, #0ea5e9);
-  border: 1px solid color-mix(in srgb, var(--info, #0ea5e9) 28%, transparent);
+.figma-badge-info,
+.status-pill.info {
+  background: color-mix(in srgb, var(--info) 12%, transparent);
+  color: var(--info);
+  border: none;
 }
 
-.figma-badge-neutral {
-  background: color-mix(in srgb, var(--text-main) 8%, transparent);
+.figma-badge-neutral,
+.status-pill.neutral {
+  background: transparent;
   color: var(--text-secondary);
-  border: 1px solid var(--border-light);
+  border: 1px solid color-mix(in srgb, var(--text-main) 22%, transparent);
 }
 
 /* Modals */
@@ -553,23 +574,7 @@
   color: var(--text-main);
 }
 
-.figma-modal-close-btn {
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  color: var(--text-muted);
-  padding: 6px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.15s ease;
-}
-
-.figma-modal-close-btn:hover {
-  background: color-mix(in srgb, var(--text-main) 8%, transparent);
-  color: var(--text-main);
-}
+/* figma-modal-close-btn mapped to standard .close-btn */
 
 .figma-modal-body {
   font-size: var(--font-size-body-sm, 14px);
@@ -654,8 +659,8 @@
 
 /* Collapsed circular search trigger (matching Image 1) */
 .figma-search-btn-trigger {
-  width: 38px;
-  height: 38px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   display: inline-flex;
   align-items: center;
@@ -687,11 +692,11 @@
   position: relative;
   display: flex;
   align-items: center;
-  background: var(--bg-card, #ffffff);
-  border: 1.5px solid var(--primary);
+  background: var(--bg-card);
+  border: 1px solid var(--primary);
   border-radius: 9999px;
   padding: 0 14px;
-  height: 38px;
+  height: 36px;
   width: 250px;
   box-sizing: border-box;
   animation: searchPillExpand 0.22s cubic-bezier(0.4, 0, 0.2, 1);
@@ -2439,24 +2444,31 @@
   flex-shrink: 0;
 }
 
-.modal-red-close-btn {
-  width: 32px;
-  height: 32px;
+.modal-red-close-btn,
+.figma-modal-close-btn,
+.close-btn {
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
-  border: none;
-  background: #fee2e2;
-  color: #dc2626;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.15s ease;
+  background: color-mix(in srgb, var(--danger) 14%, var(--bg-card));
+  color: var(--danger);
+  border: 1px solid color-mix(in srgb, var(--danger) 35%, transparent);
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--danger) 25%, transparent);
+  transition: background-color 0.2s, color 0.2s, transform 0.2s;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.modal-red-close-btn:hover {
-  background: #fecaca;
-  color: #b91c1c;
-  transform: scale(1.06);
+.modal-red-close-btn:hover,
+.figma-modal-close-btn:hover,
+.close-btn:hover {
+  background: var(--danger);
+  color: #ffffff;
+  transform: translateY(-1px);
 }
 
 /* Modal Internal Tabs Bar (View Camera - Image 3) */
@@ -2978,4 +2990,89 @@
   background: rgba(59, 130, 246, 0.25);
   border-color: #3b82f6;
   color: #3b82f6;
+}
+
+/* ========================================================
+   FRONTEND DESIGN STANDARDS - REUSABLE PATTERNS
+   ======================================================== */
+
+/* Standard Card (Section 4) */
+.standard-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--card-shadow);
+  overflow: hidden;
+}
+
+.standard-card-header {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border-light);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.standard-card-body {
+  padding: 16px;
+}
+
+/* Standard List Row - 46px (Section 4) */
+.list-row,
+.standard-list-row {
+  height: 46px;
+  min-height: 46px;
+  padding: 0 10px;
+  border-bottom: 1px solid var(--border-light);
+  display: flex;
+  align-items: center;
+  transition: background-color 0.15s ease;
+  box-sizing: border-box;
+}
+
+.list-row:hover,
+.standard-list-row:hover {
+  background: color-mix(in srgb, var(--primary) 6%, transparent);
+}
+
+.list-row-title {
+  font-size: var(--font-size-body-sm);
+  font-weight: 500;
+  color: var(--text-main);
+}
+
+.list-row-meta {
+  font-size: var(--font-size-caption);
+  color: var(--text-secondary);
+}
+
+/* Standard Empty State (Section 4) */
+.empty-state,
+.standard-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 16px;
+  text-align: center;
+}
+
+.empty-state-icon {
+  color: var(--text-muted);
+  width: 40px;
+  height: 40px;
+  margin-bottom: 12px;
+}
+
+.empty-state-title {
+  font-size: var(--font-size-body);
+  font-weight: 600;
+  color: var(--text-main);
+  margin: 0 0 4px 0;
+}
+
+.empty-state-description {
+  font-size: var(--font-size-caption);
+  color: var(--text-secondary);
+  margin: 0;
 }

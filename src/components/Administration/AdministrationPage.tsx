@@ -2815,66 +2815,49 @@ export function AdministrationPage({
         title={editingCamera ? `Edit Camera: ${editingCamera.name}` : "Add New Camera"}
         maxWidth="560px"
       >
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', padding: '16px 0' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '18px', padding: '16px 0 8px 0' }}>
           
-          <div className="admin-form-group">
-            <label className="admin-form-label">Camera Name *</label>
-            <input
-              type="text"
-              className="admin-form-input"
-              value={formName}
-              onChange={(e) => setFormName(e.target.value)}
-              placeholder="e.g. South Gate PTZ, Loading Bay 360"
+          <TextField
+            label="Camera Name *"
+            value={formName}
+            onChange={(e) => setFormName(e.target.value)}
+            placeholder="e.g. South Gate PTZ, Loading Bay 360"
+          />
+
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+            <TextField
+              as="select"
+              label="Camera Type"
+              value={formType}
+              onChange={(e) => setFormType(e.target.value as any)}
+              options={[
+                { value: 'Fixed', label: 'Fixed Camera' },
+                { value: 'PTZ', label: 'PTZ (Pan-Tilt-Zoom)' },
+                { value: '360°', label: '360° Panoramic Fisheye' }
+              ]}
+            />
+
+            <TextField
+              label="Installation Zone"
+              value={formLocation}
+              onChange={(e) => setFormLocation(e.target.value)}
+              placeholder="e.g. Main Entrance, Warehouse Aisle"
             />
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-            <div className="admin-form-group">
-              <label className="admin-form-label">Camera Type</label>
-              <select
-                className="admin-form-input"
-                value={formType}
-                onChange={(e) => setFormType(e.target.value as any)}
-              >
-                <option value="Fixed">Fixed Camera</option>
-                <option value="PTZ">PTZ (Pan-Tilt-Zoom)</option>
-                <option value="360°">360° Panoramic Fisheye</option>
-              </select>
-            </div>
+          <TextField
+            label="360° Streaming URL (RTSP / RTMP)"
+            value={form360Url}
+            onChange={(e) => setForm360Url(e.target.value)}
+            placeholder="rtsp://allcad-chennai.selfip.com:8554/..."
+          />
 
-            <div className="admin-form-group">
-              <label className="admin-form-label">Installation Zone</label>
-              <input
-                type="text"
-                className="admin-form-input"
-                value={formLocation}
-                onChange={(e) => setFormLocation(e.target.value)}
-                placeholder="e.g. Main Entrance, Warehouse Aisle"
-              />
-            </div>
-          </div>
-
-          <div className="admin-form-group">
-            <label className="admin-form-label">360° Streaming URL (RTSP / RTMP)</label>
-            <input
-              type="text"
-              className="admin-form-input"
-              value={form360Url}
-              onChange={(e) => setForm360Url(e.target.value)}
-              placeholder="rtsp://allcad-chennai.selfip.com:8554/..."
-            />
-          </div>
-
-          <div className="admin-form-group">
-            <label className="admin-form-label">PTZ Streaming URL (RTSP / RTMP)</label>
-            <input
-              type="text"
-              className="admin-form-input"
-              value={formPtzUrl}
-              onChange={(e) => setFormPtzUrl(e.target.value)}
-              placeholder="rtsp://allcad-chennai.selfip.com:8554/..."
-            />
-          </div>
+          <TextField
+            label="PTZ Streaming URL (RTSP / RTMP)"
+            value={formPtzUrl}
+            onChange={(e) => setFormPtzUrl(e.target.value)}
+            placeholder="rtsp://allcad-chennai.selfip.com:8554/..."
+          />
 
           <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '12px' }}>
             <button
