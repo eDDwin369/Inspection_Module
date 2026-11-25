@@ -13,7 +13,8 @@ import {
   MapPin,
   Trash2,
   HardDrive,
-  Users
+  Users,
+  ShieldCheck
 } from 'lucide-react';
 import './Dashboard.css';
 
@@ -139,6 +140,8 @@ export function Sidebar({
       setActiveItemId('flashback');
     } else if (currentView === 'administration') {
       setActiveItemId('administration');
+    } else if (currentView === 'administration-v2') {
+      setActiveItemId('administration-v2');
     } else if (currentView === 'account') {
       setActiveItemId('account');
     } else if (currentView === 'theme-studio') {
@@ -499,7 +502,22 @@ export function Sidebar({
             )}
           </div>
 
-          {/* 6. Account Settings */}
+          {/* 6. Inspection Module */}
+          <a
+            href="#dashboard/administration-v2"
+            className={`nav-item ${activeItemId === 'administration-v2' || currentView === 'administration-v2' ? 'active' : ''}`}
+            onClick={(e) => handleNavItemClick('administration-v2', e, 'administration-v2')}
+            onMouseEnter={(e) => handleItemMouseEnter("Inspection Module", e)}
+            onMouseLeave={handleItemMouseLeave}
+            style={{ display: 'flex', alignItems: 'center', width: isSidebarCollapsed ? undefined : '100%', position: 'relative' }}
+          >
+            <div className="shrink-0" style={{ width: 20, height: 20, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <ShieldCheck size={20} strokeWidth={2.2} color="#06b6d4" className="nav-icon" style={{ color: '#06b6d4', stroke: '#06b6d4' }} />
+            </div>
+            <span className="nav-label">Inspection Module</span>
+          </a>
+
+          {/* 7. Account Settings */}
           <a
             href="#dashboard/account"
             className={`nav-item ${activeItemId === 'account' ? 'active' : ''}`}

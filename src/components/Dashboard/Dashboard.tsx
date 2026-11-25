@@ -10,6 +10,7 @@ import { LiveMonitoringPage } from '../LiveMonitoring/LiveMonitoringPage';
 import { AIAnalysisPage } from '../AIAnalysis/AIAnalysisPage';
 import { FlashbackPage } from '../Flashback/FlashbackPage';
 import { AdministrationPage } from '../Administration/AdministrationPage';
+import { AdministrationV2Page } from '../Administration/AdministrationV2Page';
 import { mockNotifications } from '../Notifications/mockData';
 import type { NotificationItem } from '../Notifications/types';
 import { GlobalSettingsWorkspace } from '../GlobalSettings/GlobalSettingsWorkspace';
@@ -466,6 +467,8 @@ export function Dashboard({
                       }
                     }}
                   />
+                ) : currentView === 'administration-v2' ? (
+                  <AdministrationV2Page />
                 ) : currentView === 'account' ? (
                   <AccountSettings 
                     hasUnsavedChanges={hasUnsavedChanges}

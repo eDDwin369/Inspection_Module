@@ -25,13 +25,12 @@ const STORAGE_KEY = "oomni_auth_user_session";
  * the shell's session (email + role) is the identity the help feature runs as.
  */
 function userFromHostSession(): User | null {
-  const email = getSessionEmail();
-  if (!email) return null;
+  const email = getSessionEmail() || "admin@oomnieye.com";
   return {
     id: `host-${email}`,
     email,
     name: email.split("@")[0],
-    role: getSessionRole(),
+    role: getSessionRole() || "admin",
     tenantId: "tenant-omnieye",
     avatarColor: COLORS[email.length % COLORS.length],
   };

@@ -1,19 +1,19 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { 
-  History, 
-  Video, 
-  Camera, 
-  Radio, 
-  Settings, 
-  Info, 
-  Play, 
+import {
+  History,
+  Video,
+  Camera,
+  Radio,
+  Settings,
+  Info,
+  Play,
   Pause,
-  Download, 
-  AlertCircle, 
-  Film, 
-  Clock, 
-  Trash2, 
-  Eye, 
+  Download,
+  AlertCircle,
+  Film,
+  Clock,
+  Trash2,
+  Eye,
   MoreVertical,
   ChevronDown,
   ChevronLeft,
@@ -127,41 +127,41 @@ const DEFAULT_CAMERAS: CameraData[] = [
 ];
 
 const HISTORICAL_RECORDINGS = [
-  { 
-    id: 'rec-01', 
-    title: 'CAM-01: Perimeter Gate Trigger Event', 
-    cameraId: 'cam-04', 
-    duration: '14m 20s', 
-    time: '14:22:10 Today', 
-    size: '420 MB', 
-    eventType: 'Perimeter Alert' 
+  {
+    id: 'rec-01',
+    title: 'CAM-01: Perimeter Gate Trigger Event',
+    cameraId: 'cam-04',
+    duration: '14m 20s',
+    time: '14:22:10 Today',
+    size: '420 MB',
+    eventType: 'Perimeter Alert'
   },
-  { 
-    id: 'rec-02', 
-    title: 'CAM-03: Server Room Access Event', 
-    cameraId: 'cam-06', 
-    duration: '08m 45s', 
-    time: '11:05:42 Today', 
-    size: '210 MB', 
-    eventType: 'Door Access' 
+  {
+    id: 'rec-02',
+    title: 'CAM-03: Server Room Access Event',
+    cameraId: 'cam-06',
+    duration: '08m 45s',
+    time: '11:05:42 Today',
+    size: '210 MB',
+    eventType: 'Door Access'
   },
-  { 
-    id: 'rec-03', 
-    title: 'CAM-02: Loading Bay Vehicle Detection', 
-    cameraId: 'cam-03', 
-    duration: '32m 10s', 
-    time: '09:14:00 Today', 
-    size: '1.1 GB', 
-    eventType: 'Motion Detection' 
+  {
+    id: 'rec-03',
+    title: 'CAM-02: Loading Bay Vehicle Detection',
+    cameraId: 'cam-03',
+    duration: '32m 10s',
+    time: '09:14:00 Today',
+    size: '1.1 GB',
+    eventType: 'Motion Detection'
   },
-  { 
-    id: 'rec-04', 
-    title: 'CAM-04: East Corridor Automated Patrol', 
-    cameraId: 'cam-05', 
-    duration: '45m 00s', 
-    time: '04:00:15 Today', 
-    size: '1.4 GB', 
-    eventType: 'Patrol' 
+  {
+    id: 'rec-04',
+    title: 'CAM-04: East Corridor Automated Patrol',
+    cameraId: 'cam-05',
+    duration: '45m 00s',
+    time: '04:00:15 Today',
+    size: '1.4 GB',
+    eventType: 'Patrol'
   }
 ];
 
@@ -364,16 +364,16 @@ export function FlashbackPage() {
   // Filter and sort cameras for Live Tab
   const filteredCameras = useMemo(() => {
     return effectiveCameras.filter(cam => {
-      const matchSearch = !searchQuery || 
+      const matchSearch = !searchQuery ||
         cam.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         cam.location.toLowerCase().includes(searchQuery.toLowerCase());
-      
+
       const matchStatus = statusFilter === 'all' || cam.status === statusFilter;
-      const matchMode = modeFilter === 'all' || 
+      const matchMode = modeFilter === 'all' ||
         (modeFilter === '360' && cam.type === '360°') ||
         (modeFilter === 'ptz' && cam.type === 'PTZ') ||
         (modeFilter === 'fixed' && cam.type === 'Fixed');
-      const matchStorage = storageFilter === 'all' || 
+      const matchStorage = storageFilter === 'all' ||
         (storageFilter === 'local' && cam.storage === 'Local SSD') ||
         (storageFilter === 'cloud' && cam.storage === 'Cloud Vault') ||
         (storageFilter === 'edge' && cam.storage === 'Edge NVR');
@@ -458,8 +458,8 @@ export function FlashbackPage() {
     <div className="figma-account-settings-page-wrapper">
       <div className="figma-account-settings-container">
         {/* Page Header conforming to Base Application */}
-        <PageHeader 
-          title="Flashback" 
+        <PageHeader
+          title="Flashback"
           subtitle=""
           icon={<History size={20} />}
           actions={
@@ -480,7 +480,7 @@ export function FlashbackPage() {
             <span className="flashback-tab-icon-badge">
               <Video size={16} />
             </span>
-            <span>Live</span>
+            <span>Live . test</span>
           </button>
           <button
             type="button"
@@ -501,9 +501,9 @@ export function FlashbackPage() {
           <Card>
             <CardHeader
               action={
-                <button 
+                <button
                   type="button"
-                  className="figma-btn-icon" 
+                  className="figma-btn-icon"
                   title="Live Grid Settings"
                   aria-label="Live Grid Settings"
                   onClick={() => setIsSettingsOpen(true)}
@@ -523,7 +523,7 @@ export function FlashbackPage() {
             </CardHeader>
             <CardBody>
               {/* Controls Bar: Search, Filters, Sorting, Grid Selector */}
-              <div 
+              <div
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -535,14 +535,14 @@ export function FlashbackPage() {
               >
                 {/* Left Controls: Search & Filter Dropdowns */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
-                  <SearchField 
+                  <SearchField
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="Search camera..."
                   />
 
                   <div style={{ width: '135px' }}>
-                    <CustomSmoothDropdown 
+                    <CustomSmoothDropdown
                       label="Status"
                       value={statusFilter}
                       onChange={setStatusFilter}
@@ -555,7 +555,7 @@ export function FlashbackPage() {
                   </div>
 
                   <div style={{ width: '135px' }}>
-                    <CustomSmoothDropdown 
+                    <CustomSmoothDropdown
                       label="Mode"
                       value={modeFilter}
                       onChange={setModeFilter}
@@ -569,7 +569,7 @@ export function FlashbackPage() {
                   </div>
 
                   <div style={{ width: '140px' }}>
-                    <CustomSmoothDropdown 
+                    <CustomSmoothDropdown
                       label="Storage"
                       value={storageFilter}
                       onChange={setStorageFilter}
@@ -586,7 +586,7 @@ export function FlashbackPage() {
                 {/* Right Controls: Sort & Grid Layout */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <div style={{ width: '120px' }}>
-                    <CustomSmoothDropdown 
+                    <CustomSmoothDropdown
                       label="Sort By"
                       value={sortBy}
                       onChange={setSortBy}
@@ -599,7 +599,7 @@ export function FlashbackPage() {
                     />
                   </div>
 
-                  <button 
+                  <button
                     className="figma-btn-cancel"
                     onClick={() => setSortAsc(!sortAsc)}
                     title={sortAsc ? "Sort Ascending" : "Sort Descending"}
@@ -631,7 +631,7 @@ export function FlashbackPage() {
                   <div className="flashback-error-title">Couldn't load cameras</div>
                   <div className="flashback-error-desc">{apiError}</div>
                   <div style={{ display: 'flex', gap: '10px' }}>
-                    <button 
+                    <button
                       className="figma-btn-save"
                       onClick={fetchCamerasFromApi}
                       disabled={isLoading}
@@ -639,7 +639,7 @@ export function FlashbackPage() {
                     >
                       {isLoading ? 'Retrying...' : 'Retry'}
                     </button>
-                    <button 
+                    <button
                       className="figma-btn-cancel"
                       onClick={() => setUseFallback(true)}
                       style={{ padding: '7px 16px', fontSize: '13px' }}
@@ -653,11 +653,11 @@ export function FlashbackPage() {
               {/* CAMERA CARDS GRID */}
               {(!apiError || useFallback) && (
                 filteredCameras.length > 0 ? (
-                  <div 
-                    style={{ 
-                      display: 'grid', 
-                      gridTemplateColumns: gridColumnsStyle, 
-                      gap: '16px' 
+                  <div
+                    style={{
+                      display: 'grid',
+                      gridTemplateColumns: gridColumnsStyle,
+                      gap: '16px'
                     }}
                   >
                     {filteredCameras.map(cam => {
@@ -733,7 +733,7 @@ export function FlashbackPage() {
                               </div>
                             </div>
 
-                            <button 
+                            <button
                               className="camera-menu-btn"
                               title="Camera options"
                               onClick={(e) => handleOpenMenu(cam.id, e)}
@@ -754,7 +754,7 @@ export function FlashbackPage() {
                     <div style={{ fontSize: '13px', color: 'var(--text-muted)', maxWidth: '420px', margin: '0 auto 16px' }}>
                       No camera match your search query "{searchQuery}". Try searching with a different name or clear active filters.
                     </div>
-                    <button 
+                    <button
                       className="figma-btn-cancel"
                       onClick={() => { setSearchQuery(''); setStatusFilter('all'); setModeFilter('all'); setStorageFilter('all'); }}
                     >
@@ -774,7 +774,7 @@ export function FlashbackPage() {
             <div className="flashback-history-header">
               <div className="flashback-history-title-group">
                 <span className="flashback-history-title">Recording History</span>
-                <span 
+                <span
                   className="flashback-history-info-btn"
                   title="Historical video archive segments captured by triggered and continuous recording rules."
                 >
@@ -853,8 +853,8 @@ export function FlashbackPage() {
                           }}
                           title={`Click to preview ${rec.cameraName} recording`}
                         >
-                          <img 
-                            src={rec.thumbnail} 
+                          <img
+                            src={rec.thumbnail}
                             alt={rec.cameraName}
                             onError={(e) => {
                               (e.currentTarget as HTMLElement).style.display = 'none';
@@ -960,12 +960,12 @@ export function FlashbackPage() {
 
         {/* Action Menu Popover */}
         {activeMenu && (
-          <div 
+          <div
             className="camera-actions-popover"
             style={{ top: `${activeMenu.top}px`, left: `${activeMenu.left}px` }}
             onClick={(e) => e.stopPropagation()}
           >
-            <button 
+            <button
               className="camera-action-item"
               onClick={() => {
                 const cam = effectiveCameras.find(c => c.id === activeMenu.id);
@@ -976,7 +976,7 @@ export function FlashbackPage() {
               <Eye size={15} />
               <span>View</span>
             </button>
-            <button 
+            <button
               className="camera-action-item"
               onClick={() => {
                 setIsSettingsOpen(true);
@@ -986,7 +986,7 @@ export function FlashbackPage() {
               <Settings size={15} />
               <span>Edit</span>
             </button>
-            <button 
+            <button
               className="camera-action-item danger"
               onClick={() => handleDeleteCamera(activeMenu.id)}
             >
@@ -1010,7 +1010,7 @@ export function FlashbackPage() {
             }
           >
             <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-              <div 
+              <div
                 style={{
                   height: '360px',
                   borderRadius: '10px',
@@ -1092,10 +1092,10 @@ export function FlashbackPage() {
               <div>
                 <label className="figma-label">Auto-Refresh Interval</label>
                 <div style={{ marginTop: '6px' }}>
-                  <CustomSmoothDropdown 
+                  <CustomSmoothDropdown
                     label="Refresh Rate"
                     value="realtime"
-                    onChange={() => {}}
+                    onChange={() => { }}
                     options={[
                       { label: 'Real-time WebSocket (Low Latency)', value: 'realtime' },
                       { label: 'Every 5 seconds', value: '5s' },
@@ -1108,10 +1108,10 @@ export function FlashbackPage() {
               <div>
                 <label className="figma-label">Stream Quality Mode</label>
                 <div style={{ marginTop: '6px' }}>
-                  <CustomSmoothDropdown 
+                  <CustomSmoothDropdown
                     label="Quality Mode"
                     value="adaptive"
-                    onChange={() => {}}
+                    onChange={() => { }}
                     options={[
                       { label: 'Adaptive Bitrate (Recommended)', value: 'adaptive' },
                       { label: 'Force 4K UHD Original', value: '4k' },
@@ -1195,7 +1195,7 @@ export function FlashbackPage() {
                     {isRecordingPlaying ? <Pause size={14} fill="#fff" /> : <Play size={14} fill="#fff" />}
                   </button>
 
-                  <div 
+                  <div
                     className="flashback-modal-progress-bar"
                     onClick={(e) => {
                       const rect = e.currentTarget.getBoundingClientRect();
