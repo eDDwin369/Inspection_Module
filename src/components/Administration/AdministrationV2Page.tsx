@@ -16,7 +16,8 @@ import {
   Eye,
   EyeOff,
   ImageOff,
-  Ruler
+  Ruler,
+  LayoutDashboard
 } from 'lucide-react';
 import { PageHeader } from '../shared/PageHeader';
 import { Modal } from '../shared/Modal';
@@ -119,6 +120,7 @@ const V2_DEVICE_SITES = [
 ];
 
 export function AdministrationV2Page() {
+  const [activeSection, setActiveSection] = useState<'dashboard' | 'administration'>('dashboard');
   const [activeTab, setActiveTab] = useState<'users' | 'devices' | 'tickets'>('tickets');
   const [integrations, setIntegrations] = useState<TicketingIntegration[]>(INITIAL_INTEGRATIONS);
   
@@ -301,14 +303,47 @@ export function AdministrationV2Page() {
       <PageHeader 
         title="Inspection Module" 
         icon={<Shield size={20} />}
-        subItem={{
-          label: currentTabConfig.label,
-          icon: currentTabConfig.icon
-        }}
+        subItem={
+          activeSection === 'dashboard'
+            ? { label: 'Dashboard', icon: <LayoutDashboard size={18} /> }
+            : { label: currentTabConfig.label, icon: currentTabConfig.icon }
+        }
+        actions={
+          <div className="admin-v2-mode-toggle" role="group" aria-label="Inspection Module view switcher">
+            <button
+              type="button"
+              className={`admin-v2-mode-btn ${activeSection === 'dashboard' ? 'active' : ''}`}
+              onClick={() => setActiveSection('dashboard')}
+              aria-pressed={activeSection === 'dashboard'}
+            >
+              <LayoutDashboard size={15} />
+              <span>Dashboard</span>
+            </button>
+            <button
+              type="button"
+              className={`admin-v2-mode-btn ${activeSection === 'administration' ? 'active' : ''}`}
+              onClick={() => setActiveSection('administration')}
+              aria-pressed={activeSection === 'administration'}
+            >
+              <Shield size={15} />
+              <span>Administration</span>
+            </button>
+          </div>
+        }
       />
 
-      {/* Sub-tabs Navigation Bar (Matching AI Management) */}
-      <div className="admin-subtabs-bar" role="tablist">
+      {activeSection === 'dashboard' ? (
+        <div className="admin-v2-dashboard-blank">
+          <img
+            src="/images/inspection-dashboard.jpg"
+            alt="Inspection Module Dashboard"
+            className="admin-v2-dashboard-img"
+          />
+        </div>
+      ) : (
+        <>
+          {/* Sub-tabs Navigation Bar (Matching AI Management) */}
+          <div className="admin-subtabs-bar" role="tablist">
         <button
           type="button"
           role="tab"
@@ -754,6 +789,8 @@ export function AdministrationV2Page() {
           </div>
         )}
       </div>
+        </>
+      )}
 
       {/* ADD INTEGRATION MODAL */}
       <Modal
